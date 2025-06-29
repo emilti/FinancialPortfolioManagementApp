@@ -1,4 +1,7 @@
-﻿using FinancialPortfolioManagementApp.Application.Authentication;
+﻿using FinancialPortfolioManagementApp.Api.Common;
+using FinancialPortfolioManagementApp.Application.Authentication;
+using FinancialPortfolioManagementApp.Application.Common;
+using FinancialPortfolioManagementApp.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity.Data;
@@ -25,14 +28,15 @@ namespace FinancialPortfolioManagementApp.Api.Controllers
 
             RegisterCommand command = new RegisterCommand(request.Email, request.Password);
             var authResult = await _mediator.Send(command);
-            //var response = ApiResponse.FromResult(authResult);
+            
+            var apiResponse = ApiResponse<AuthenticationResult>.FromResult(authResult);
+            
+            if (apiResponse.Errors.Any())
+            {
+                return BadRequest(String.Join(',', apiResponse.Errors));
+            }
 
-            //if (response.Errors.Any())
-            //{
-            //    return BadRequest(String.Join(',', response.Errors));
-            //}
-
-            return Ok();// Ok(response.Message);
+            return Ok(apiResponse);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using FinancialPortfolioManagementApp.Application.Authentication;
+using FinancialPortfolioManagementApp.Application.Common;
 using FinancialPortfolioManagementApp.Domain.Entities;
 using FinancialPortfolioManagementApp.Domain.Interfaces;
 using FinancialPortfolioManagementApp.Infrastructure.Contracts;
@@ -27,44 +28,22 @@ namespace FinancialPortfolioManagementApp.Infrastructure.Services
             _mapper = mapper;
         }
 
-        public async Task<AuthenticationResult> RegisterAsync(
+        public async Task<Result<AuthenticationResult>> RegisterAsync(
             User user,
             string password
             )
         {
             var authUser = _mapper.ToAuthUser(user);
 
-            // Transaction ensures both succeed or fail together
-            //using var transaction = await _dbContext.Database.BeginTransactionAsync();
+            var result = await _userManager.CreateAsync(authUser, password);
+            if (!result.Succeeded)
+            {
+                return Result.Failure<AuthenticationResult>(result.Errors.Select(x => x.Description));
+            }
 
-            //try
-            //{
-                _dbContext.Users.Add(authUser);
-                await _dbContext.SaveChangesAsync();
-
-                var result = await _userManager.CreateAsync(authUser, password);
-                //if (!result.Succeeded)
-                //{
-                //    await transaction.RollbackAsync();
-                //}
-
-                //await transaction.CommitAsync();
-
-                // Generate tokens
-                var token = _tokenGenerator.GenerateToken(authUser);
-                //var refreshToken = await _userManager.GenerateUserTokenAsync(
-                //    authUser,
-                //    TokenOptions.DefaultProvider,
-                //    "Refresh");
-
-                return new AuthenticationResult(user, token);
-            //}
-            //catch (Exception ex)
-            //{
-            //    await transaction.RollbackAsync();
-            //    throw new Exception();
-            //    //return Result.Fail(ex.Message);
-            //}
+            var token = _tokenGenerator.GenerateToken(authUser);
+            
+            return new AuthenticationResult(user, token);
         }
     }
 }
