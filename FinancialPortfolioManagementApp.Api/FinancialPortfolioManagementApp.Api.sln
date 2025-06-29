@@ -1,0 +1,40 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35521.163 d17.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinancialPortfolioManagementApp.Api", "FinancialPortfolioManagementApp.Api.csproj", "{D8624698-62AE-4424-AC13-FBB3698E88F2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinancialPortfolioManagementApp.Application", "..\FinancialPortfolioManagementApp.Application\FinancialPortfolioManagementApp.Application.csproj", "{1B5721AD-95BB-485F-BA24-C0B849D23944}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinancialPortfolioManagementApp.Domain", "..\FinancialPortfolioManagementApp.Domain\FinancialPortfolioManagementApp.Domain.csproj", "{BAB57871-B4C9-485C-A488-3DB3F38751CA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FinancialPortfolioManagementApp.Infrastructure", "..\FinancialPortfolioManagementApp.Infrastructure\FinancialPortfolioManagementApp.Infrastructure.csproj", "{1D941E28-3AD1-4535-BB5F-9D5891BE9D51}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D8624698-62AE-4424-AC13-FBB3698E88F2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D8624698-62AE-4424-AC13-FBB3698E88F2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D8624698-62AE-4424-AC13-FBB3698E88F2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D8624698-62AE-4424-AC13-FBB3698E88F2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B5721AD-95BB-485F-BA24-C0B849D23944}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B5721AD-95BB-485F-BA24-C0B849D23944}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B5721AD-95BB-485F-BA24-C0B849D23944}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B5721AD-95BB-485F-BA24-C0B849D23944}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BAB57871-B4C9-485C-A488-3DB3F38751CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BAB57871-B4C9-485C-A488-3DB3F38751CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BAB57871-B4C9-485C-A488-3DB3F38751CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BAB57871-B4C9-485C-A488-3DB3F38751CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1D941E28-3AD1-4535-BB5F-9D5891BE9D51}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1D941E28-3AD1-4535-BB5F-9D5891BE9D51}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1D941E28-3AD1-4535-BB5F-9D5891BE9D51}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1D941E28-3AD1-4535-BB5F-9D5891BE9D51}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
