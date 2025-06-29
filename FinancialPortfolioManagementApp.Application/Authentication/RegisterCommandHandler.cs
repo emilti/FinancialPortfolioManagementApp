@@ -16,6 +16,7 @@ namespace FinancialPortfolioManagementApp.Application.Authentication
             CancellationToken cancellationToken)
         {
             var user = new User(request.Email);
+
             return await _authService.RegisterAsync(
                 user,
                 request.Password

@@ -21,12 +21,15 @@ namespace FinancialPortfolioManagementApp.Infrastructure.Extensions
         {
             // Database
             services.AddDbContext<FinancialPortfolioManagementAppDbContext>(options =>
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+                options.UseSqlServer(
+                    configuration.GetConnectionString("FinancialPortfolioManagementDb"),
+                    sqlOptions => sqlOptions.MigrationsAssembly(typeof(FinancialPortfolioManagementAppDbContext).Assembly.FullName)));
 
             // Identity
             services.AddIdentityCore<AuthUser>()
                 .AddEntityFrameworkStores<FinancialPortfolioManagementAppDbContext>()
                 .AddDefaultTokenProviders();
+            services.AddAuthorization();
 
             // JWT Authentication
             services.AddAuth(configuration);
@@ -59,10 +62,10 @@ namespace FinancialPortfolioManagementApp.Infrastructure.Extensions
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = configuration["JwtSettings:Issuer"],
-                    ValidAudience = configuration["JwtSettings:Audience"],
+                    ValidIssuer = "tetsttsa", // configuration["JwtSettings:Issuer"],
+                    ValidAudience = "tetsttsa",//configuration["JwtSettings:Audience"],
                     IssuerSigningKey = new SymmetricSecurityKey(
-                        Encoding.UTF8.GetBytes(configuration["JwtSettings:SecretKey"]))
+                        Encoding.UTF8.GetBytes("key"))//configuration["JwtSettings:SecretKey"]))
                 };
             });
 

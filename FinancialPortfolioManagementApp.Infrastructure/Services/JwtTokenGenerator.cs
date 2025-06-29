@@ -2,6 +2,7 @@
 using FinancialPortfolioManagementApp.Infrastructure.Contracts;
 using FinancialPortfolioManagementApp.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -16,20 +17,23 @@ namespace FinancialPortfolioManagementApp.Infrastructure.Services
         private readonly UserManager<AuthUser> _userManager;
         private readonly IUserMapper _userMapper;
 
+        private readonly IConfiguration _configuration; 
         public JwtTokenGenerator(
            // IOptions<JwtSettings> jwtSettings,
             UserManager<AuthUser> userManager,
-            IUserMapper userMapper)
+            IUserMapper userMapper,
+            IConfiguration configuration)
         {
             //_jwtSettings = jwtSettings.Value;
             _userManager = userManager;
             _userMapper = userMapper;
+            _configuration= configuration;
         }
 
         public string GenerateToken(AuthUser user)
         {
             var signingCredentials = new SigningCredentials(
-                new SymmetricSecurityKey(Encoding.UTF8.GetBytes("test")),//)_jwtSettings.SecretKey)),
+                new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JwtSettings:Key"])),
                 SecurityAlgorithms.HmacSha256);
 
             var claims = new List<Claim>
@@ -40,10 +44,10 @@ namespace FinancialPortfolioManagementApp.Infrastructure.Services
         };
 
             var token = new JwtSecurityToken(
-                issuer: "issuer",// _jwtSettings.Issuer,
-                audience: "MenuCreated", //_jwtSettings.Audience,
+                issuer: _configuration["JwtSettings:Issuer"],
+                audience: _configuration["JwtSettings.Audience"],
                 claims: claims,
-                expires: DateTime.UtcNow.AddMinutes(30),//);_jwtSettings.ExpiryMinutes),
+                expires: DateTime.UtcNow.AddMinutes(double.Parse(_configuration["JwtSettings:ExpiryMinutes"])),
                 signingCredentials: signingCredentials);
 
             return new JwtSecurityTokenHandler().WriteToken(token);

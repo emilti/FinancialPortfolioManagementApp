@@ -11,6 +11,7 @@ namespace FinancialPortfolioManagementApp.Infrastructure.Services
             return new AuthUser
             {
                 UserName = domainUser.Email,
+                Email = domainUser.Email
             };
         }
 

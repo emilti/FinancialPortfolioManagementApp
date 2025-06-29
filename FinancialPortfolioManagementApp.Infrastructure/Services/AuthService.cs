@@ -35,20 +35,20 @@ namespace FinancialPortfolioManagementApp.Infrastructure.Services
             var authUser = _mapper.ToAuthUser(user);
 
             // Transaction ensures both succeed or fail together
-            using var transaction = await _dbContext.Database.BeginTransactionAsync();
+            //using var transaction = await _dbContext.Database.BeginTransactionAsync();
 
-            try
-            {
+            //try
+            //{
                 _dbContext.Users.Add(authUser);
                 await _dbContext.SaveChangesAsync();
 
                 var result = await _userManager.CreateAsync(authUser, password);
-                if (!result.Succeeded)
-                {
-                    await transaction.RollbackAsync();
-                }
+                //if (!result.Succeeded)
+                //{
+                //    await transaction.RollbackAsync();
+                //}
 
-                await transaction.CommitAsync();
+                //await transaction.CommitAsync();
 
                 // Generate tokens
                 var token = _tokenGenerator.GenerateToken(authUser);
@@ -58,13 +58,13 @@ namespace FinancialPortfolioManagementApp.Infrastructure.Services
                 //    "Refresh");
 
                 return new AuthenticationResult(user, token);
-            }
-            catch (Exception ex)
-            {
-                await transaction.RollbackAsync();
-                throw new Exception();
-                //return Result.Fail(ex.Message);
-            }
+            //}
+            //catch (Exception ex)
+            //{
+            //    await transaction.RollbackAsync();
+            //    throw new Exception();
+            //    //return Result.Fail(ex.Message);
+            //}
         }
     }
 }
