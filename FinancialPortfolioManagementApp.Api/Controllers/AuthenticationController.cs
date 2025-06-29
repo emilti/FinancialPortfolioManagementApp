@@ -24,13 +24,27 @@ namespace FinancialPortfolioManagementApp.Api.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register(RegisterRequest request)
         {
-            //  var command = _mapper.Map<RegisterCommand>(request);
-
             RegisterCommand command = new RegisterCommand(request.Email, request.Password);
             var authResult = await _mediator.Send(command);
             
             var apiResponse = ApiResponse<AuthenticationResult>.FromResult(authResult);
             
+            if (apiResponse.Errors.Any())
+            {
+                return BadRequest(String.Join(',', apiResponse.Errors));
+            }
+
+            return Ok(apiResponse);
+        }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login(LoginRequest request)
+        {
+            LoginCommand command = new LoginCommand(request.Email, request.Password);
+            var authResult = await _mediator.Send(command);
+
+            var apiResponse = ApiResponse<AuthenticationResult>.FromResult(authResult);
+
             if (apiResponse.Errors.Any())
             {
                 return BadRequest(String.Join(',', apiResponse.Errors));

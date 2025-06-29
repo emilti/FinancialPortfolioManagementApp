@@ -27,6 +27,7 @@
 
         public static Result<T> Success<T>(T data, string message = "") => new(data, true, message);
         public static Result<T> Failure<T>(string error) => new Result<T>(default, false, new[] { error });
+        public async static Task<Result<T>> FailureAsync<T>(string error) => new Result<T>(default, false, new[] { error });
         public static Result<T> Failure<T>(IEnumerable<string> errors) => new Result<T>(default, false, errors);
     }
 
