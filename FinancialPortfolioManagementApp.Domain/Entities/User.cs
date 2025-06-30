@@ -1,31 +1,31 @@
-﻿namespace FinancialPortfolioManagementApp.Domain.Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace FinancialPortfolioManagementApp.Domain.Entities
 {
     public class User
     {
         public Guid Id { get; private set; }
+
+        [Required]
+        [MaxLength(255)]
+        [EmailAddress]
         public string Email { get; set; }
+
         public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
 
-        public User(string email) 
+        public ICollection<AssetTransaction> AssetTransactions { get; set; } = new List<AssetTransaction>();
+
+        public ICollection<Holding> Holdings { get; set; } = new List<Holding>();
+
+        public User(string email)
         {
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                throw new ArgumentException("Email cannot be empty", nameof(email));
+            }
+
             Id = Guid.NewGuid();
             Email = email;
         }
-
-        // Factory method
-        //public static User Create(string email)
-        //{
-        //    if (string.IsNullOrWhiteSpace(email))
-        //    {
-        //        throw new("Email is required");
-
-        //    }
-
-        //    return new User
-        //    {
-        //        Id = Guid.NewGuid(),
-        //        Email = email,
-        //    };
-        //}
     }
 }
