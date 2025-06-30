@@ -3,12 +3,10 @@ using Microsoft.AspNetCore.Identity;
 
 namespace FinancialPortfolioManagementApp.Infrastructure.Identity
 {
-    public class AuthUser : IdentityUser
+    public class AuthUser : IdentityUser<Guid>
     {
         public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
 
-        public Guid? DomainUserId { get; set; }
-
-        public virtual User? DomainUser { get; set; }
+        public virtual User? PortfolioUser { get; set; }
     }
 }

@@ -6,10 +6,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FinancialPortfolioManagementApp.Infrastructure.Persistence
 {
-    public class FinancialPortfolioManagementAppDbContext : IdentityDbContext<AuthUser>
+    public class FinancialPortfolioManagementAppDbContext : IdentityDbContext<AuthUser, Role, Guid>
     {
-        public DbSet<AuthUser> AuthUsers { get; set; }
-
         public DbSet<User> PortfolioUsers { get; set; }
 
         public DbSet<Asset> Assets { get; set; }
@@ -33,10 +31,10 @@ namespace FinancialPortfolioManagementApp.Infrastructure.Persistence
                 authUser.Property(u => u.CreatedAt)
                        .HasDefaultValueSql("GETUTCDATE()");
 
-                authUser.HasOne(a => a.DomainUser)
-                       .WithOne() 
-                       .HasForeignKey<User>("AuthUserId") 
-                       .OnDelete(DeleteBehavior.Cascade); 
+                authUser.HasOne(a => a.PortfolioUser)
+                   .WithOne()
+                   .HasForeignKey<User>(u => u.Id) 
+                   .OnDelete(DeleteBehavior.Cascade);
             });
 
             builder.Entity<User>(entity =>

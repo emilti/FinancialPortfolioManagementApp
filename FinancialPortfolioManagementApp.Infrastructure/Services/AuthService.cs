@@ -36,12 +36,14 @@ namespace FinancialPortfolioManagementApp.Infrastructure.Services
             )
         {
             var authUser = _mapper.ToAuthUser(user);
-
+            
             var result = await _userManager.CreateAsync(authUser, password);
             if (!result.Succeeded)
             {
                 return Result.Failure<AuthenticationResult>(result.Errors.Select(x => x.Description));
             }
+
+            user.Id = authUser.Id;
 
             var token = _tokenGenerator.GenerateToken(authUser);
             
