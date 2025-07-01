@@ -10,7 +10,5 @@ namespace FinancialPortfolioManagementApp.Api.Controllers
     public abstract class CustomControllerBase(ISender mediator) : ControllerBase
     {
         protected ISender Mediator { get; } = mediator;
-
-        //protected IMapper Mapper { get; } = mapper;
     }
 }
