@@ -1,4 +1,4 @@
-﻿namespace FinancialPortfolioManagementApp.Api.Models.Requests
+﻿namespace FinancialPortfolioManagementApp.Api.Models.Assets.Requests
 {
     public class CreateAssetRequest
     {

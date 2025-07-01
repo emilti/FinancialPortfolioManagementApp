@@ -1,3 +1,4 @@
+using FinancialPortfolioManagementApp.Api.Configurations;
 using FinancialPortfolioManagementApp.Application.Extensions;
 using FinancialPortfolioManagementApp.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Mvc.Authorization;
@@ -10,11 +11,11 @@ builder.Services.AddControllers(options =>
 {
     options.Filters.Add(new AllowAnonymousFilter()); // Global allow
 });
+builder.Services.AddAutoMapper(typeof(AssetMappingProfile));
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
-   
 var app = builder.Build();
 
 

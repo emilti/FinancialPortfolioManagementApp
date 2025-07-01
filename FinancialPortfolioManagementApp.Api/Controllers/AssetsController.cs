@@ -1,5 +1,7 @@
-﻿using FinancialPortfolioManagementApp.Api.Common;
-using FinancialPortfolioManagementApp.Api.Models.Requests;
+﻿using AutoMapper;
+using FinancialPortfolioManagementApp.Api.Common;
+using FinancialPortfolioManagementApp.Api.Models.Assets.Requests;
+using FinancialPortfolioManagementApp.Api.Models.Assets.Response;
 using FinancialPortfolioManagementApp.Application.Assets.Commands.CreateAsset;
 using FinancialPortfolioManagementApp.Application.Assets.Commands.DeleteAsset;
 using FinancialPortfolioManagementApp.Application.Assets.Commands.UpdateAsset;
@@ -16,24 +18,28 @@ namespace FinancialPortfolioManagementApp.Api.Controllers
     public class AssetsController : CustomControllerBase
     {
         private readonly ISender _mediator;
+        private readonly IMapper _mapper;
 
-        public AssetsController(ISender mediator) : base(mediator)
+        public AssetsController(ISender mediator, IMapper mapper) : base(mediator, mapper)
         {
             _mediator = mediator;
+            _mapper = mapper;
         }
 
-        [HttpGet("{id:guid}")]        
+        [HttpGet("{id:guid}")]
         public async Task<IActionResult> GetAssetById(Guid id)
         {
             var query = new GetAssetByIdQuery(id);
             var result = await _mediator.Send(query);
 
-            var apiResponse = ApiResponse<Asset>.FromResult(result);
+            var response = Response<Asset>.FromResult(result);
 
-            if (apiResponse.Errors.Any())
+            if (response.Errors.Any())
             {
-                return NotFound(string.Join(',', apiResponse.Errors));
+                return NotFound(new { Errors = response.Errors });
             }
+
+            var apiResponse = Mapper.Map<Response<AssetResponse>>(response);
 
             return Ok(apiResponse);
         }
@@ -44,14 +50,19 @@ namespace FinancialPortfolioManagementApp.Api.Controllers
             var command = new CreateAssetCommand(request.Name, request.CurrentMarketPrice);
             var result = await _mediator.Send(command);
 
-            var apiResponse = ApiResponse<Asset>.FromResult(result);
+            var response = Response<Asset>.FromResult(result);
 
-            if (apiResponse.Errors.Any())
+            if (response.Errors.Any())
             {
-                return BadRequest(string.Join(',', apiResponse.Errors));
+                return BadRequest(string.Join(',', response.Errors));
             }
 
-            return Ok(apiResponse);
+            var apiResponse = Mapper.Map<Response<AssetResponse>>(response);
+
+            return CreatedAtAction(
+                nameof(GetAssetById), 
+                new { id = apiResponse.Data?.Id },
+                response);
         }
 
         [HttpPut("{id:guid}")]
@@ -60,14 +71,14 @@ namespace FinancialPortfolioManagementApp.Api.Controllers
             var command = new UpdateAssetCommand(id, request.Name, request.CurrentMarketPrice);
             var result = await _mediator.Send(command);
 
-            var apiResponse = ApiResponse<bool>.FromResult(result);
+            var response = Response<bool>.FromResult(result);
 
-            if (apiResponse.Errors.Any())
+            if (response.Errors.Any())
             {
-                return BadRequest(string.Join(',', apiResponse.Errors));
+                return BadRequest(string.Join(',', response.Errors));
             }
 
-            return Ok(apiResponse);
+            return NoContent();
         }
 
         [HttpDelete("{id:guid}")]
@@ -76,11 +87,11 @@ namespace FinancialPortfolioManagementApp.Api.Controllers
             var command = new DeleteAssetCommand(id);
             var result = await _mediator.Send(command);
 
-            var apiResponse = ApiResponse<bool>.FromResult(result);
+            var response = Response<bool>.FromResult(result);
 
-            if (apiResponse.Errors.Any())
+            if (response.Errors.Any())
             {
-                return BadRequest(string.Join(',', apiResponse.Errors));
+                return BadRequest(string.Join(',', response.Errors));
             }
 
             return NoContent();
