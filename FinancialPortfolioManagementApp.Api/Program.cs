@@ -1,21 +1,15 @@
 using FinancialPortfolioManagementApp.Application.Extensions;
 using FinancialPortfolioManagementApp.Infrastructure.Extensions;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using System.Reflection;
-using static System.Net.Mime.MediaTypeNames;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
-
-//builder = WebApplication.CreateBuilder(args);
-//{
-//    builder.Services
-//        .AddApplication()
-//        .AddInfrastructure(builder.Configuration);
-
-//}
 builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.Filters.Add(new AllowAnonymousFilter()); // Global allow
+});
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
@@ -23,12 +17,12 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.Get
    
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
+app.UseRouting();
 app.UseAuthentication();
+app.UseAuthorization();
 app.MapControllers();
 
 app.Run();

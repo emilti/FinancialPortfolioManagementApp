@@ -1,7 +1,9 @@
-﻿using FinancialPortfolioManagementApp.Domain.Interfaces;
+﻿using FinancialPortfolioManagementApp.Application.Contracts;
+using FinancialPortfolioManagementApp.Domain.Interfaces;
 using FinancialPortfolioManagementApp.Infrastructure.Contracts;
 using FinancialPortfolioManagementApp.Infrastructure.Identity;
 using FinancialPortfolioManagementApp.Infrastructure.Persistence;
+using FinancialPortfolioManagementApp.Infrastructure.Repositories;
 using FinancialPortfolioManagementApp.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -38,6 +40,8 @@ namespace FinancialPortfolioManagementApp.Infrastructure.Extensions
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
             services.AddScoped<IUserMapper, UserMapper>();
+            services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IAssetRepository, AssetRepository>();
 
             return services;
         }
@@ -62,10 +66,21 @@ namespace FinancialPortfolioManagementApp.Infrastructure.Extensions
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = "tetsttsa", // configuration["JwtSettings:Issuer"],
-                    ValidAudience = "tetsttsa",//configuration["JwtSettings:Audience"],
+                    ValidIssuer = configuration["JwtSettings:Issuer"],
+                    ValidAudience = configuration["JwtSettings:Audience"],
                     IssuerSigningKey = new SymmetricSecurityKey(
-                        Encoding.UTF8.GetBytes("key"))//configuration["JwtSettings:SecretKey"]))
+                        Encoding.UTF8.GetBytes(configuration["JwtSettings:Key"]))
+                };
+                options.Events = new JwtBearerEvents
+                {
+                    OnAuthenticationFailed = context => {
+                        Console.WriteLine($"Authentication failed: {context.Exception.Message}");
+                        return Task.CompletedTask;
+                    },
+                    OnTokenValidated = context => {
+                        Console.WriteLine("Token validated successfully!");
+                        return Task.CompletedTask;
+                    }
                 };
             });
 

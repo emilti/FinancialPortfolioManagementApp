@@ -4,7 +4,7 @@ namespace FinancialPortfolioManagementApp.Domain.Entities
 {
     public class User
     {
-        public Guid Id { get; private set; }
+        public Guid Id { get; set; }
 
         [Required]
         [MaxLength(255)]
@@ -24,7 +24,6 @@ namespace FinancialPortfolioManagementApp.Domain.Entities
                 throw new ArgumentException("Email cannot be empty", nameof(email));
             }
 
-            Id = Guid.NewGuid();
             Email = email;
         }
     }
