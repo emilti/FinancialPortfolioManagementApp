@@ -24,4 +24,8 @@
     <ProjectReference Include="..\FinancialPortfolioManagementApp.Infrastructure\FinancialPortfolioManagementApp.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Models\PortfolioUser\Requests\" />
+  </ItemGroup>
+
 </Project>

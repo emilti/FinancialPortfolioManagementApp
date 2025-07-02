@@ -1,4 +1,5 @@
 ﻿using FinancialPortfolioManagementApp.Domain.Entities;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace FinancialPortfolioManagementApp.Application.Contracts
 {
@@ -6,6 +7,10 @@ namespace FinancialPortfolioManagementApp.Application.Contracts
     {
         public Holding Get(Guid UserId, Guid AssetId);
 
+        IQueryable<Holding> GetByUserId(Guid userId);
+
+        Task<IDbContextTransaction> BeginTransactionAsync();
+       
         void Add(Holding holding);
 
         void Update(Holding holding);

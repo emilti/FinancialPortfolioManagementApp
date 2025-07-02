@@ -1,4 +1,5 @@
 using FinancialPortfolioManagementApp.Api.Configurations;
+using FinancialPortfolioManagementApp.Api.Middlewares;
 using FinancialPortfolioManagementApp.Application.Extensions;
 using FinancialPortfolioManagementApp.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Mvc.Authorization;
@@ -20,7 +21,7 @@ var app = builder.Build();
 
 
 app.UseHttpsRedirection();
-
+app.UseMiddleware<ExceptionMiddleware>();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();

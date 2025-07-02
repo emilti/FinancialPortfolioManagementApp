@@ -2,6 +2,7 @@
 using FinancialPortfolioManagementApp.Api.Common;
 using FinancialPortfolioManagementApp.Api.Models.Assets.Requests;
 using FinancialPortfolioManagementApp.Api.Models.Assets.Response;
+using FinancialPortfolioManagementApp.Application.Assets.Commands.BuyAsset;
 using FinancialPortfolioManagementApp.Application.Assets.Commands.CreateAsset;
 using FinancialPortfolioManagementApp.Application.Assets.Commands.DeleteAsset;
 using FinancialPortfolioManagementApp.Application.Assets.Commands.UpdateAsset;
@@ -26,10 +27,10 @@ namespace FinancialPortfolioManagementApp.Api.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("{id:guid}")]
-        public async Task<IActionResult> GetAssetById(Guid id)
+        [HttpGet("{assetId:guid}")]
+        public async Task<IActionResult> GetAssetById(Guid assetId)
         {
-            var query = new GetAssetByIdQuery(id);
+            var query = new GetAssetByIdQuery(assetId);
             var result = await _mediator.Send(query);
 
             var response = Response<Asset>.FromResult(result);
@@ -65,10 +66,10 @@ namespace FinancialPortfolioManagementApp.Api.Controllers
                 response);
         }
 
-        [HttpPut("{id:guid}")]
-        public async Task<IActionResult> UpdateAsset(Guid id, [FromBody] UpdateAssetRequest request)
+        [HttpPut("{assetId:guid}")]
+        public async Task<IActionResult> UpdateAsset(Guid assetId, [FromBody] UpdateAssetRequest request)
         {
-            var command = new UpdateAssetCommand(id, request.Name, request.CurrentMarketPrice);
+            var command = new UpdateAssetCommand(assetId, request.Name, request.CurrentMarketPrice);
             var result = await _mediator.Send(command);
 
             var response = Response<bool>.FromResult(result);
@@ -81,10 +82,42 @@ namespace FinancialPortfolioManagementApp.Api.Controllers
             return NoContent();
         }
 
-        [HttpDelete("{id:guid}")]
-        public async Task<IActionResult> DeleteAsset(Guid id)
+        [HttpDelete("{assetId:guid}")]
+        public async Task<IActionResult> DeleteAsset(Guid assetId)
         {
-            var command = new DeleteAssetCommand(id);
+            var command = new DeleteAssetCommand(assetId);
+            var result = await _mediator.Send(command);
+
+            var response = Response<bool>.FromResult(result);
+
+            if (response.Errors.Any())
+            {
+                return BadRequest(string.Join(',', response.Errors));
+            }
+
+            return NoContent();
+        }
+
+        [HttpPost("{assetId:guid}/buy")]
+        public async Task<IActionResult> BuyAsset(Guid assetId, [FromBody] BuyAssetRequest request)
+        {
+            var command = new BuyAssetCommand(request.UserId, assetId, request.Quantity);
+            var result = await _mediator.Send(command);
+
+            var response = Response<bool>.FromResult(result);
+
+            if (response.Errors.Any())
+            {
+                return BadRequest(string.Join(',', response.Errors));
+            }
+
+            return NoContent();
+        }
+
+        [HttpPost("{assetId:guid}/sell")]
+        public async Task<IActionResult> SellAsset(Guid assetId, [FromBody] SellAssetRequest request)
+        {
+            var command = new SellAssetCommand(request.UserId, assetId, request.Quantity);
             var result = await _mediator.Send(command);
 
             var response = Response<bool>.FromResult(result);

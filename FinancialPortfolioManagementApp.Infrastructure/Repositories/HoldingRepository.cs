@@ -1,12 +1,19 @@
 ﻿using FinancialPortfolioManagementApp.Application.Contracts;
 using FinancialPortfolioManagementApp.Domain.Entities;
 using FinancialPortfolioManagementApp.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace FinancialPortfolioManagementApp.Infrastructure.Repositories
 {
     public class HoldingRepository : IHoldingRepository
     {
         private readonly FinancialPortfolioManagementAppDbContext _dbContext;
+
+        public async Task<IDbContextTransaction> BeginTransactionAsync()
+        {
+            return await _dbContext.Database.BeginTransactionAsync();
+        }
 
         public HoldingRepository(FinancialPortfolioManagementAppDbContext dbContext)
         {
@@ -16,6 +23,11 @@ namespace FinancialPortfolioManagementApp.Infrastructure.Repositories
         public Holding Get(Guid userId, Guid assetId)
         {
             return _dbContext.Holdings.FirstOrDefault(x => x.UserId == userId && x.AssetId == assetId);
+        }
+
+        public IQueryable<Holding> GetByUserId(Guid userId)
+        {
+            return _dbContext.Holdings.Where(x => x.UserId == userId).Include(x => x.Asset);
         }
 
         public void Add(Holding holding)

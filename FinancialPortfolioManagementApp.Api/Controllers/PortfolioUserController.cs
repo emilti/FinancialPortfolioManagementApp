@@ -1,11 +1,17 @@
 ﻿using AutoMapper;
-using FinancialPortfolioManagementApp.Api.Models.PortfolioUser.Requests;
-using FinancialPortfolioManagementApp.Application.PortfolioUser.Commands;
+using FinancialPortfolioManagementApp.Api.Common;
+using FinancialPortfolioManagementApp.Api.Models.Assets.Response;
+using FinancialPortfolioManagementApp.Application.Assets.Queries;
+using FinancialPortfolioManagementApp.Application.PortfolioUser.Query;
+using FinancialPortfolioManagementApp.Domain.Entities;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FinancialPortfolioManagementApp.Api.Controllers
 {
+    [Route("api/portfolio-users")]
+    [Authorize]
     public class PortfolioUserController : CustomControllerBase
     {
         private readonly ISender _mediator;
@@ -17,25 +23,23 @@ namespace FinancialPortfolioManagementApp.Api.Controllers
             _mapper = mapper;
         }
 
-        [HttpPost]
-        public async Task<IActionResult> BuyAsset([FromBody] BuyAssetRequest request)
-        {
-            var command = new BuyAssetCommand(request.UserId, request.AsetId, request.Quantity);
-            var result = await _mediator.Send(command);
-            return null;
-            //var response = Response<Asset>.FromResult(result);
 
-            //if (response.Errors.Any())
-            //{
-            //    return BadRequest(string.Join(',', response.Errors));
-            //}
+        [HttpGet("{userId:guid}")]
+        public async Task<IActionResult> GetAssetById(Guid userId)
+        {
+            var query = new GetHoldingsSummaryByUserIdQuery(userId);
+            var result = await _mediator.Send(query);
+
+            var response = Response<PortfolioSummary>.FromResult(result);
+
+            if (response.Errors.Any())
+            {
+                return NotFound(new { Errors = response.Errors });
+            }
 
             //var apiResponse = Mapper.Map<Response<AssetResponse>>(response);
 
-            //return CreatedAtAction(
-            //    nameof(GetAssetById),
-            //    new { id = apiResponse.Data?.Id },
-            //    response);
+            return Ok(response);
         }
     }
 }
