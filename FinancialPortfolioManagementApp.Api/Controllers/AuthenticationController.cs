@@ -1,7 +1,6 @@
-﻿using FinancialPortfolioManagementApp.Api.Common;
+﻿using AutoMapper;
+using FinancialPortfolioManagementApp.Api.Common;
 using FinancialPortfolioManagementApp.Application.Authentication;
-using FinancialPortfolioManagementApp.Application.Common;
-using FinancialPortfolioManagementApp.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity.Data;
@@ -14,11 +13,11 @@ namespace FinancialPortfolioManagementApp.Api.Controllers
     public class AuthenticationController : CustomControllerBase
     {
         private readonly ISender _mediator;
-        //private readonly IMapper _mapper;
-        public AuthenticationController(ISender mediator) : base(mediator)
+        private readonly IMapper _mapper;
+        public AuthenticationController(ISender mediator, IMapper mapper) : base(mediator, mapper)
         {
             _mediator = mediator;
-            //_mapper = mapper;
+            _mapper = mapper;
         }
 
         [HttpPost("register")]
@@ -27,14 +26,14 @@ namespace FinancialPortfolioManagementApp.Api.Controllers
             RegisterCommand command = new RegisterCommand(request.Email, request.Password);
             var authResult = await _mediator.Send(command);
             
-            var apiResponse = ApiResponse<AuthenticationResult>.FromResult(authResult);
+            var response = Response<AuthenticationResult>.FromResult(authResult);
             
-            if (apiResponse.Errors.Any())
+            if (response.Errors.Any())
             {
-                return BadRequest(String.Join(',', apiResponse.Errors));
+                return BadRequest(String.Join(',', response.Errors));
             }
 
-            return Ok(apiResponse);
+            return Ok(response);
         }
 
         [HttpPost("login")]
@@ -43,14 +42,14 @@ namespace FinancialPortfolioManagementApp.Api.Controllers
             LoginCommand command = new LoginCommand(request.Email, request.Password);
             var authResult = await _mediator.Send(command);
 
-            var apiResponse = ApiResponse<AuthenticationResult>.FromResult(authResult);
+            var response = Response<AuthenticationResult>.FromResult(authResult);
 
-            if (apiResponse.Errors.Any())
+            if (response.Errors.Any())
             {
-                return BadRequest(String.Join(',', apiResponse.Errors));
+                return BadRequest(String.Join(',', response.Errors));
             }
 
-            return Ok(apiResponse);
+            return Ok(response);
         }
     }
 }

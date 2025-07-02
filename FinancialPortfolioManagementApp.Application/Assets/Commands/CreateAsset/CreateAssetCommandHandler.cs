@@ -1,7 +1,7 @@
-﻿using FinancialPortfolioManagementApp.Application.Common;
-using FinancialPortfolioManagementApp.Application.Contracts;
+﻿using FinancialPortfolioManagementApp.Application.Shared.Common;
 using FinancialPortfolioManagementApp.Domain.Entities;
 using MediatR;
+using FinancialPortfolioManagementApp.Application.Shared.Contracts;
 
 namespace FinancialPortfolioManagementApp.Application.Assets.Commands.CreateAsset
 {

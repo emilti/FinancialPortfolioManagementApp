@@ -1,4 +1,4 @@
-﻿namespace FinancialPortfolioManagementApp.Application.Common
+﻿namespace FinancialPortfolioManagementApp.Application.Shared.Common
 {
     public class Result
     {

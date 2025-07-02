@@ -1,6 +1,6 @@
 ﻿using FinancialPortfolioManagementApp.Domain.Entities;
 
-namespace FinancialPortfolioManagementApp.Application.Contracts
+namespace FinancialPortfolioManagementApp.Application.Shared.Contracts
 {
     public interface IAssetRepository
     {

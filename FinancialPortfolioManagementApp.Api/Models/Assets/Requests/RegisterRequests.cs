@@ -1,11 +1,11 @@
-﻿namespace FinancialPortfolioManagementApp.Api.Models.Requests
+﻿namespace FinancialPortfolioManagementApp.Api.Models.Assets.Requests
 {
-    public class LoginRequest
+    public class RegisterRequests
     {
         public string Email { get; init; }
         public string Password { get; init; }
 
-        public LoginRequest(string email, string password)
+        public RegisterRequests(string email, string password)
         {
             Email = email;
             Password = password;

@@ -1,12 +1,6 @@
-﻿using FinancialPortfolioManagementApp.Application.Common;
-using FinancialPortfolioManagementApp.Domain.Entities;
-using FinancialPortfolioManagementApp.Domain.Interfaces;
+﻿using FinancialPortfolioManagementApp.Application.Shared.Common;
+using FinancialPortfolioManagementApp.Domain.Shared.Interfaces;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FinancialPortfolioManagementApp.Application.Authentication
 {

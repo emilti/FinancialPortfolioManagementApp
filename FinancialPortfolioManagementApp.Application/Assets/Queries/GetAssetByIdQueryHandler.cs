@@ -1,5 +1,5 @@
-﻿using FinancialPortfolioManagementApp.Application.Common;
-using FinancialPortfolioManagementApp.Application.Contracts;
+﻿using FinancialPortfolioManagementApp.Application.Shared.Common;
+using FinancialPortfolioManagementApp.Application.Shared.Contracts;
 using FinancialPortfolioManagementApp.Domain.Entities;
 using MediatR;
 

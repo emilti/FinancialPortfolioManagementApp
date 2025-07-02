@@ -1,17 +1,17 @@
-﻿using FinancialPortfolioManagementApp.Application.Common;
+﻿using FinancialPortfolioManagementApp.Application.Shared.Common;
 
 namespace FinancialPortfolioManagementApp.Api.Common
 {
-    public class ApiResponse<T>
+    public class Response<T>
     {
         public bool Success { get; set; }
         public string Message { get; set; } = string.Empty;
         public T? Data { get; set; }
         public List<string> Errors { get; set; } = new();
 
-        public static ApiResponse<T> FromResult(Result<T> result)
+        public static Response<T> FromResult(Result<T> result)
         {
-            return new ApiResponse<T>
+            return new Response<T>
             {
                 Success = result.IsSuccess,
                 Message = result.Message,

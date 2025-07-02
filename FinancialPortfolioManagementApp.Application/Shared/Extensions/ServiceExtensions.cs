@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using System.Reflection;
 
-namespace FinancialPortfolioManagementApp.Application.Extensions
+namespace FinancialPortfolioManagementApp.Application.Shared.Extensions
 {
     public static class ServiceExtensions
     {
