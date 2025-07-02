@@ -1,6 +1,7 @@
-﻿using FinancialPortfolioManagementApp.Application.Contracts;
+﻿using FinancialPortfolioManagementApp.Application.Shared.Contracts;
 using FinancialPortfolioManagementApp.Domain.Entities;
 using FinancialPortfolioManagementApp.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 namespace FinancialPortfolioManagementApp.Infrastructure.Repositories
 {
@@ -16,6 +17,14 @@ namespace FinancialPortfolioManagementApp.Infrastructure.Repositories
         public void Add(AssetTransaction assetTransaction)
         {
             _dbContext.Add(assetTransaction);
+        }
+
+        public async Task<IEnumerable<AssetTransaction>> GetByUserIdAsync(Guid userId)
+        {
+            return await _dbContext.AssetTransactions
+                .Where(x => x.UserId == userId)
+                .Include(x => x.Asset)
+                .ToListAsync();
         }
 
         public async Task SaveAsync()

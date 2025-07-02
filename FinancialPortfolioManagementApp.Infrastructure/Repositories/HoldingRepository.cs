@@ -1,4 +1,4 @@
-﻿using FinancialPortfolioManagementApp.Application.Contracts;
+﻿using FinancialPortfolioManagementApp.Application.Shared.Contracts;
 using FinancialPortfolioManagementApp.Domain.Entities;
 using FinancialPortfolioManagementApp.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -25,9 +25,9 @@ namespace FinancialPortfolioManagementApp.Infrastructure.Repositories
             return _dbContext.Holdings.FirstOrDefault(x => x.UserId == userId && x.AssetId == assetId);
         }
 
-        public IQueryable<Holding> GetByUserId(Guid userId)
+        public async Task<IEnumerable<Holding>> GetByUserIdAsync(Guid userId)
         {
-            return _dbContext.Holdings.Where(x => x.UserId == userId).Include(x => x.Asset);
+            return await _dbContext.Holdings.Where(x => x.UserId == userId).Include(x => x.Asset).ToListAsync();
         }
 
         public void Add(Holding holding)

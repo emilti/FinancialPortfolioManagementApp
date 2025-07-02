@@ -1,4 +1,4 @@
-﻿using FinancialPortfolioManagementApp.Application.Contracts;
+﻿using FinancialPortfolioManagementApp.Application.Shared.Contracts;
 using FinancialPortfolioManagementApp.Domain.Entities;
 using FinancialPortfolioManagementApp.Infrastructure.Persistence;
 

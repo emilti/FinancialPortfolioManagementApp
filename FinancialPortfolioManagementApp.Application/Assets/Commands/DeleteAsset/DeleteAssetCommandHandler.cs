@@ -1,12 +1,7 @@
-﻿using FinancialPortfolioManagementApp.Application.Common;
-using FinancialPortfolioManagementApp.Application.Contracts;
+﻿using FinancialPortfolioManagementApp.Application.Shared.Common;
+using FinancialPortfolioManagementApp.Application.Shared.Contracts;
 using FinancialPortfolioManagementApp.Domain.Entities;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FinancialPortfolioManagementApp.Application.Assets.Commands.DeleteAsset
 {

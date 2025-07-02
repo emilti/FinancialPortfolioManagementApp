@@ -1,13 +1,13 @@
 ﻿using FinancialPortfolioManagementApp.Domain.Entities;
 using Microsoft.EntityFrameworkCore.Storage;
 
-namespace FinancialPortfolioManagementApp.Application.Contracts
+namespace FinancialPortfolioManagementApp.Application.Shared.Contracts
 {
     public interface IHoldingRepository
     {
         public Holding Get(Guid UserId, Guid AssetId);
 
-        IQueryable<Holding> GetByUserId(Guid userId);
+        Task<IEnumerable<Holding>> GetByUserIdAsync(Guid userId);
 
         Task<IDbContextTransaction> BeginTransactionAsync();
        

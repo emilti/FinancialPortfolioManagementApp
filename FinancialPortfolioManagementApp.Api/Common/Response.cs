@@ -1,4 +1,4 @@
-﻿using FinancialPortfolioManagementApp.Application.Common;
+﻿using FinancialPortfolioManagementApp.Application.Shared.Common;
 
 namespace FinancialPortfolioManagementApp.Api.Common
 {

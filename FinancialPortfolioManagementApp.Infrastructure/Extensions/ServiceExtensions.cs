@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
-using FinancialPortfolioManagementApp.Application.Contracts;
-using FinancialPortfolioManagementApp.Domain.Interfaces;
+using FinancialPortfolioManagementApp.Application.Shared.Contracts;
+using FinancialPortfolioManagementApp.Domain.Shared.Interfaces;
 using FinancialPortfolioManagementApp.Infrastructure.Contracts;
 using FinancialPortfolioManagementApp.Infrastructure.Identity;
 using FinancialPortfolioManagementApp.Infrastructure.Persistence;

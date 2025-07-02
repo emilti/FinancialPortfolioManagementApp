@@ -1,8 +1,8 @@
 ﻿using FinancialPortfolioManagementApp.Application.Authentication;
-using FinancialPortfolioManagementApp.Application.Common;
+using FinancialPortfolioManagementApp.Application.Shared.Common;
 using FinancialPortfolioManagementApp.Domain.Entities;
 
-namespace FinancialPortfolioManagementApp.Domain.Interfaces
+namespace FinancialPortfolioManagementApp.Domain.Shared.Interfaces
 {
     public interface IAuthService
     {
