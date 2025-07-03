@@ -1,5 +1,4 @@
 ﻿using FinancialPortfolioManagementApp.Application.Shared.Common;
-using FinancialPortfolioManagementApp.Domain.Entities;
 using MediatR;
 
 namespace FinancialPortfolioManagementApp.Application.Assets.Commands.UpdateAsset

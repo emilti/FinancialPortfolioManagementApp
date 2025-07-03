@@ -11,14 +11,17 @@ namespace FinancialPortfolioManagementApp.Application.Assets.Commands.SellAsset
         private readonly IHoldingRepository _holdingRepository;
         private readonly IAssetTransactionRepository _assetTransactionRepository;
         private readonly IAssetRepository _assetRepository;
+        private ICurrentUserService _currentUserService;
         public SellAssetCommandHandler(
             IHoldingRepository holdingRepository,
             IAssetTransactionRepository assetTransactionRepository,
-            IAssetRepository assetRepository)
+            IAssetRepository assetRepository,
+            ICurrentUserService currentUserService)
         {
             _holdingRepository = holdingRepository;
             _assetTransactionRepository = assetTransactionRepository;
             _assetRepository = assetRepository;
+            _currentUserService = currentUserService;
         }
 
         public async Task<Result<bool>> Handle(
@@ -35,10 +38,20 @@ namespace FinancialPortfolioManagementApp.Application.Assets.Commands.SellAsset
                 return Result.Failure<bool>("Quantity must be positive");
             }
 
-            await using var transaction = await _holdingRepository.BeginTransactionAsync();
+            var transaction =  await _holdingRepository.BeginTransactionAsync();
 
             try
             {
+                if (!_currentUserService.IsAuthenticated)
+                {
+                    return Result.Failure<bool>("No authenticated user");
+                }
+
+                if (new Guid(_currentUserService.UserId) != request.UserId)
+                {
+                    return Result.Failure<bool>("Invalid request. Performed action is not authorized.");
+                }
+
                 var holding = _holdingRepository.Get(request.UserId, request.AssetId);
 
                 if (holding == null)
@@ -51,7 +64,7 @@ namespace FinancialPortfolioManagementApp.Application.Assets.Commands.SellAsset
                     return Result.Failure<bool>("Invalid operation. Can not sell more quantity than actual holding quantity of this asset.");
                 }
 
-                var asset = _assetRepository.Get(request.AssetId);
+                var asset = await _assetRepository.GetAsync(request.AssetId);
                 if (asset == null)
                 {
                     return Result.Failure<bool>($"Asset {request.AssetId} not found");
@@ -66,8 +79,8 @@ namespace FinancialPortfolioManagementApp.Application.Assets.Commands.SellAsset
                     Quantity = request.Quantity,
                     Type = Domain.Enums.TransactionType.Sell,
                 };
-
                 _assetTransactionRepository.Add(assetTransaction);
+               
                 await _holdingRepository.SaveAsync();
 
                 await transaction.CommitAsync(cancellationToken);

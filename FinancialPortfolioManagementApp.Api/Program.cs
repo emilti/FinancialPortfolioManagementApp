@@ -15,7 +15,7 @@ builder.Services.AddControllers(options =>
     options.Filters.Add(new AllowAnonymousFilter());
 
 });
-
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddAutoMapper(typeof(AssetMappingProfile));
 builder.Services.AddAutoMapper(typeof(HoldingsProfile));
 builder.Services.AddApplication();

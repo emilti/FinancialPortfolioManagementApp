@@ -1,19 +1,14 @@
 ﻿using FinancialPortfolioManagementApp.Application.Shared.Contracts;
 using FinancialPortfolioManagementApp.Domain.Entities;
 using FinancialPortfolioManagementApp.Infrastructure.Persistence;
+using FinancialPortfolioManagementApp.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 
 namespace FinancialPortfolioManagementApp.Infrastructure.Repositories
 {
     public class HoldingRepository : IHoldingRepository
     {
         private readonly FinancialPortfolioManagementAppDbContext _dbContext;
-
-        public async Task<IDbContextTransaction> BeginTransactionAsync()
-        {
-            return await _dbContext.Database.BeginTransactionAsync();
-        }
 
         public HoldingRepository(FinancialPortfolioManagementAppDbContext dbContext)
         {
@@ -48,6 +43,12 @@ namespace FinancialPortfolioManagementApp.Infrastructure.Repositories
         public async Task SaveAsync()
         {
             await _dbContext.SaveChangesAsync();
+        }
+
+        public async Task<ITransaction> BeginTransactionAsync()
+        {
+            var transaction = await _dbContext.Database.BeginTransactionAsync();
+            return new EfTransaction(transaction);
         }
     }
 }

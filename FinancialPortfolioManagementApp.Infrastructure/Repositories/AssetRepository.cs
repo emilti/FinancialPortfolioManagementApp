@@ -1,6 +1,7 @@
 ﻿using FinancialPortfolioManagementApp.Application.Shared.Contracts;
 using FinancialPortfolioManagementApp.Domain.Entities;
 using FinancialPortfolioManagementApp.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 namespace FinancialPortfolioManagementApp.Infrastructure.Repositories
 {
@@ -13,9 +14,9 @@ namespace FinancialPortfolioManagementApp.Infrastructure.Repositories
             _dbContext = dbContext;
         }
 
-        public Asset Get(Guid id)
+        public async Task<Asset?> GetAsync(Guid id)
         {
-            return _dbContext.Assets.FirstOrDefault(x => x.Id == id);
+            return await _dbContext.Assets.FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public void Add(Asset asset)
