@@ -1,10 +1,8 @@
 ﻿using FinancialPortfolioManagementApp.Application.Shared.Contracts;
 using FinancialPortfolioManagementApp.Domain.Entities;
-using FinancialPortfolioManagementApp.Infrastructure.Contracts;
 using FinancialPortfolioManagementApp.Infrastructure.Persistence;
 using FinancialPortfolioManagementApp.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 
 namespace FinancialPortfolioManagementApp.Infrastructure.Repositories
 {

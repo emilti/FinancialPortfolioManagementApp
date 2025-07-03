@@ -10,20 +10,33 @@ namespace FinancialPortfolioManagementApp.Application.Assets.Commands.BuyAsset
         private readonly IHoldingRepository _holdingRepository;
         private readonly IAssetTransactionRepository _assetTransactionRepository;
         private readonly IAssetRepository _assetRepository;
+        private readonly ICurrentUserService _currentUserService;
         public BuyAsseyCommandHandler(
             IHoldingRepository holdingRepository,
-            IAssetTransactionRepository assetTransactionRepository, 
-            IAssetRepository assetRepository)
+            IAssetTransactionRepository assetTransactionRepository,
+            IAssetRepository assetRepository,
+            ICurrentUserService currentUserService)
         {
             _holdingRepository = holdingRepository;
             _assetTransactionRepository = assetTransactionRepository;
             _assetRepository = assetRepository;
+            _currentUserService = currentUserService;
         }
 
         public async Task<Result<bool>> Handle(
             BuyAssetCommand request,
             CancellationToken cancellationToken)
         {
+            if (!_currentUserService.IsAuthenticated)
+            {
+                return Result.Failure<bool>("No authenticated user");
+            }
+
+            if (new Guid(_currentUserService.UserId) != request.UserId)
+            {
+                return Result.Failure<bool>("Invalid request. Performed action is not authorized.");
+            }
+
             if (request == null)
             {
                 return Result.Failure<bool>("Request cannot be null");

@@ -1,5 +1,4 @@
 ﻿using FinancialPortfolioManagementApp.Domain.Entities;
-using Microsoft.EntityFrameworkCore.Storage;
 
 namespace FinancialPortfolioManagementApp.Application.Shared.Contracts
 {

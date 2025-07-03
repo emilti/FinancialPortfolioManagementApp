@@ -1,8 +1,8 @@
 ﻿using Azure.Core;
 using FinancialPortfolioManagementApp.Application.Authentication;
 using FinancialPortfolioManagementApp.Application.Shared.Common;
+using FinancialPortfolioManagementApp.Application.Shared.Contracts;
 using FinancialPortfolioManagementApp.Domain.Entities;
-using FinancialPortfolioManagementApp.Domain.Shared.Interfaces;
 using FinancialPortfolioManagementApp.Infrastructure.Contracts;
 using FinancialPortfolioManagementApp.Infrastructure.Identity;
 using FinancialPortfolioManagementApp.Infrastructure.Persistence;

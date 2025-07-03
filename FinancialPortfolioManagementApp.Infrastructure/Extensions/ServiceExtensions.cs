@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using FinancialPortfolioManagementApp.Application.Shared.Contracts;
-using FinancialPortfolioManagementApp.Domain.Shared.Interfaces;
 using FinancialPortfolioManagementApp.Infrastructure.Contracts;
 using FinancialPortfolioManagementApp.Infrastructure.Identity;
 using FinancialPortfolioManagementApp.Infrastructure.Persistence;
@@ -46,7 +45,7 @@ namespace FinancialPortfolioManagementApp.Infrastructure.Extensions
             services.AddScoped<IHoldingRepository, HoldingRepository>();
             services.AddScoped<IAssetTransactionRepository, AssetTransactionRepository>();
             services.AddScoped<IMapper, Mapper>();
-
+            services.AddScoped<ICurrentUserService, CurrentUserService>();
             return services;
         }
 

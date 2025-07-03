@@ -11,14 +11,17 @@ namespace FinancialPortfolioManagementApp.Application.Assets.Commands.SellAsset
         private readonly IHoldingRepository _holdingRepository;
         private readonly IAssetTransactionRepository _assetTransactionRepository;
         private readonly IAssetRepository _assetRepository;
+        private ICurrentUserService _currentUserService;
         public SellAssetCommandHandler(
             IHoldingRepository holdingRepository,
             IAssetTransactionRepository assetTransactionRepository,
-            IAssetRepository assetRepository)
+            IAssetRepository assetRepository,
+            ICurrentUserService currentUserService)
         {
             _holdingRepository = holdingRepository;
             _assetTransactionRepository = assetTransactionRepository;
             _assetRepository = assetRepository;
+            _currentUserService = currentUserService;
         }
 
         public async Task<Result<bool>> Handle(
@@ -39,6 +42,16 @@ namespace FinancialPortfolioManagementApp.Application.Assets.Commands.SellAsset
 
             try
             {
+                if (!_currentUserService.IsAuthenticated)
+                {
+                    return Result.Failure<bool>("No authenticated user");
+                }
+
+                if (new Guid(_currentUserService.UserId) != request.UserId)
+                {
+                    return Result.Failure<bool>("Invalid request. Performed action is not authorized.");
+                }
+
                 var holding = _holdingRepository.Get(request.UserId, request.AssetId);
 
                 if (holding == null)

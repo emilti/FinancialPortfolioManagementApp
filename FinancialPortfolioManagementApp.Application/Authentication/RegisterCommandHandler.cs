@@ -1,7 +1,6 @@
 ﻿using FinancialPortfolioManagementApp.Application.Shared.Common;
 using FinancialPortfolioManagementApp.Application.Shared.Contracts;
 using FinancialPortfolioManagementApp.Domain.Entities;
-using FinancialPortfolioManagementApp.Domain.Shared.Interfaces;
 using MediatR;
 
 namespace FinancialPortfolioManagementApp.Application.Authentication
