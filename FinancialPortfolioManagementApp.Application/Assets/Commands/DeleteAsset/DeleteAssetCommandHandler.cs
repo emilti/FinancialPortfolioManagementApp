@@ -16,7 +16,7 @@ namespace FinancialPortfolioManagementApp.Application.Assets.Commands.DeleteAsse
             DeleteAssetCommand request,
             CancellationToken cancellationToken)
         {
-            Asset asset = _assetRepository.Get(request.id);
+            Asset asset = await _assetRepository.GetAsync(request.id);
             _assetRepository.Delete(asset);
             await _assetRepository.SaveAsync();
 

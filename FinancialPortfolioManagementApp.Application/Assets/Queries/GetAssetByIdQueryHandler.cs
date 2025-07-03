@@ -16,7 +16,7 @@ namespace FinancialPortfolioManagementApp.Application.Assets.Queries
             GetAssetByIdQuery request,
             CancellationToken cancellationToken)
         {
-            var asset = _assetRepository.Get(request.Id);
+            var asset = await _assetRepository.GetAsync(request.Id);
 
             return Result.Success(asset);
         }

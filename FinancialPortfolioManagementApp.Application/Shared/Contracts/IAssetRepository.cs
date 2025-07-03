@@ -4,7 +4,7 @@ namespace FinancialPortfolioManagementApp.Application.Shared.Contracts
 {
     public interface IAssetRepository
     {
-        public Asset Get(Guid id);
+        Task<Asset?> GetAsync(Guid id);
 
         void Add(Asset asset);
 

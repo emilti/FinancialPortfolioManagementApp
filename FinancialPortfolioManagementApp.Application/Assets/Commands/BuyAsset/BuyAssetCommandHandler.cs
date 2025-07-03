@@ -34,7 +34,7 @@ namespace FinancialPortfolioManagementApp.Application.Assets.Commands.BuyAsset
                 return Result.Failure<bool>("Quantity must be positive");
             }
 
-            await using var transaction = await _holdingRepository.BeginTransactionAsync();
+            var transaction = await _holdingRepository.BeginTransactionAsync();
 
             try
             {
@@ -56,7 +56,7 @@ namespace FinancialPortfolioManagementApp.Application.Assets.Commands.BuyAsset
                     _holdingRepository.Update(holding);
                 }
 
-                var asset = _assetRepository.Get(request.AssetId);
+                var asset = await _assetRepository.GetAsync(request.AssetId);
                 if (asset == null)
                 {
                     await transaction.RollbackAsync(cancellationToken);

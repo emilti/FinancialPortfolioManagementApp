@@ -9,8 +9,6 @@ namespace FinancialPortfolioManagementApp.Application.Shared.Contracts
 
         Task<IEnumerable<Holding>> GetByUserIdAsync(Guid userId);
 
-        Task<IDbContextTransaction> BeginTransactionAsync();
-       
         void Add(Holding holding);
 
         void Update(Holding holding);
@@ -18,5 +16,7 @@ namespace FinancialPortfolioManagementApp.Application.Shared.Contracts
         void Delete(Holding holding);
 
         Task SaveAsync();
+
+        Task<ITransaction> BeginTransactionAsync();
     }
 }

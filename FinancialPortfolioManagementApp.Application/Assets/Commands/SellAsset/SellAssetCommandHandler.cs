@@ -35,7 +35,7 @@ namespace FinancialPortfolioManagementApp.Application.Assets.Commands.SellAsset
                 return Result.Failure<bool>("Quantity must be positive");
             }
 
-            await using var transaction = await _holdingRepository.BeginTransactionAsync();
+            var transaction =  await _holdingRepository.BeginTransactionAsync();
 
             try
             {
@@ -51,7 +51,7 @@ namespace FinancialPortfolioManagementApp.Application.Assets.Commands.SellAsset
                     return Result.Failure<bool>("Invalid operation. Can not sell more quantity than actual holding quantity of this asset.");
                 }
 
-                var asset = _assetRepository.Get(request.AssetId);
+                var asset = await _assetRepository.GetAsync(request.AssetId);
                 if (asset == null)
                 {
                     return Result.Failure<bool>($"Asset {request.AssetId} not found");
@@ -66,8 +66,8 @@ namespace FinancialPortfolioManagementApp.Application.Assets.Commands.SellAsset
                     Quantity = request.Quantity,
                     Type = Domain.Enums.TransactionType.Sell,
                 };
-
                 _assetTransactionRepository.Add(assetTransaction);
+               
                 await _holdingRepository.SaveAsync();
 
                 await transaction.CommitAsync(cancellationToken);
