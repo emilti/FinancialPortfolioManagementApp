@@ -48,7 +48,7 @@ namespace FinancialPortfolioManagementApp.Application.Assets.Commands.SellAsset
                 }
 
                 Guid userId = new Guid(_currentUserService.UserId);
-                var holding = _holdingRepository.Get(userId, request.AssetId);
+                var holding = await _holdingRepository.GetAsync(userId, request.AssetId);
 
                 if (holding == null)
                 {
