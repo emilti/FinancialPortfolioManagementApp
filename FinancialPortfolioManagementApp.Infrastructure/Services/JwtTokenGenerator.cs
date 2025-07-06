@@ -13,18 +13,15 @@ namespace FinancialPortfolioManagementApp.Infrastructure.Services
 {
     public class JwtTokenGenerator : IJwtTokenGenerator
     {
-      //  private readonly JwtSettings _jwtSettings;
         private readonly UserManager<AuthUser> _userManager;
         private readonly IUserMapper _userMapper;
         private readonly IConfiguration _configuration; 
 
         public JwtTokenGenerator(
-           // IOptions<JwtSettings> jwtSettings,
             UserManager<AuthUser> userManager,
             IUserMapper userMapper,
             IConfiguration configuration)
         {
-            //_jwtSettings = jwtSettings.Value;
             _userManager = userManager;
             _userMapper = userMapper;
             _configuration= configuration;
@@ -46,7 +43,7 @@ namespace FinancialPortfolioManagementApp.Infrastructure.Services
 
             var token = new JwtSecurityToken(
                 issuer: _configuration["JwtSettings:Issuer"],
-                audience: _configuration["JwtSettings:Audience"], // Fix: Use colon, not dot
+                audience: _configuration["JwtSettings:Audience"],
                 claims: claims,
                 expires: DateTime.UtcNow.AddMinutes(
                     double.Parse(_configuration["JwtSettings:ExpiryMinutes"])),

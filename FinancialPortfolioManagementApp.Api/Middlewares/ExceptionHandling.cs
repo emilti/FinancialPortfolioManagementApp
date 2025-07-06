@@ -15,7 +15,6 @@
                 await context.Response.WriteAsJsonAsync(new
                 {
                     Error = "An unexpected error occurred."
-                    //Details = ex.Message // Only in development!
                 });
             }
         }

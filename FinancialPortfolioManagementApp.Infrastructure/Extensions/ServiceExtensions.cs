@@ -21,22 +21,18 @@ namespace FinancialPortfolioManagementApp.Infrastructure.Extensions
             this IServiceCollection services,
             IConfiguration configuration)
         {
-            // Database
             services.AddDbContext<FinancialPortfolioManagementAppDbContext>(options =>
                 options.UseSqlServer(
                     configuration.GetConnectionString("FinancialPortfolioManagementDb"),
                     sqlOptions => sqlOptions.MigrationsAssembly(typeof(FinancialPortfolioManagementAppDbContext).Assembly.FullName)));
 
-            // Identity
             services.AddIdentityCore<AuthUser>()
                 .AddEntityFrameworkStores<FinancialPortfolioManagementAppDbContext>()
                 .AddDefaultTokenProviders();
             services.AddAuthorization();
 
-            // JWT Authentication
             services.AddAuth(configuration);
 
-            // Services
             services.AddScoped<IAuthService, AuthService>();
             services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
             services.AddScoped<IUserMapper, UserMapper>();
@@ -53,9 +49,6 @@ namespace FinancialPortfolioManagementApp.Infrastructure.Extensions
             this IServiceCollection services,
             IConfiguration configuration)
         {
-            //services.Configure<JwtSettings>(
-            //    configuration.GetSection("JwtSettings"));
-
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
