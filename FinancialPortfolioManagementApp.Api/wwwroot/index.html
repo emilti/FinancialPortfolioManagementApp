@@ -99,12 +99,15 @@
 <body>
   <div class="container">
     <div class="tabs">
-      <div class="tab active" onclick="switchTab('login')">Login</div>
-      <div class="tab" onclick="switchTab('register')">Register</div>
-      <div class="tab" onclick="switchTab('createAsset')">Create asset</div>
+      <div class="tab active" onclick="switchTab('login-tab')">Login</div>
+      <div class="tab" onclick="switchTab('register-tab')">Register</div>
+      <div class="tab" onclick="switchTab('get-asset-tab')">Get asset</div>
+      <div class="tab" onclick="switchTab('create-asset-tab')">Create asset</div>
+      <div class="tab" onclick="switchTab('update-asset-tab')">Update asset</div>
+      <div class="tab" onclick="switchTab('delete-asset-tab')">Delete asset</div>
     </div>
 
-    <div id="login" class="tab-content active">
+    <div id="login-tab" class="tab-content active">
       <div class="auth-form">
         <h2>Login</h2>
         <div class="form-group">
@@ -120,7 +123,7 @@
       </div>
     </div>
 
-    <div id="register" class="tab-content">
+    <div id="register-tab" class="tab-content">
       <div class="auth-form">
         <h2>Register</h2>
         <div class="form-group">
@@ -137,19 +140,64 @@
     </div>
   </div>
 
-  <div id="createAsset" class="tab-content">
+  <div id="get-asset-tab" class="tab-content">
+    <div class="get-asset-form">
+      <h2>Get asset</h2>
+      <div class="form-group">
+        <label for="get-asset-id">Id:</label>
+        <input type="text" id="get-asset-id" required>
+      </div>
+      <button onclick="getAsset()">Get asset</button>
+      <div id="get-asset-message" class="message"></div>
+      <div id="asset-result" class="result-container"></div>
+    </div>
+  </div>
+
+  <div id="create-asset-tab" class="tab-content">
     <div class="create-asset-form">
       <h2>Create asset</h2>
       <div class="form-group">
-        <label for="name">Name:</label>
-        <input type="text" id="name" required>
+        <label for="create-asset-name">Name:</label>
+        <input type="text" id="create-asset-name" required>
       </div>
       <div class="form-group">
-        <label for="current-market-price">Current market price:</label>
-        <input type="number" id="current-market-price" required>
+        <label for="create-asset-current-market-price">Current market price:</label>
+        <input type="number" id="create-asset-current-market-price" required>
       </div>
       <button onclick="createAsset()">Create asset</button>
-      <div id="create-asset" class="message"></div>
+      <div id="create-asset-message" class="message"></div>
+    </div>
+  </div>
+
+  <div id="update-asset-tab" class="tab-content">
+    <div class="update-asset-form">
+      <h2>Update asset</h2>
+      <div class="form-group">
+        <label for="update-asset-id">Id:</label>
+        <input type="text" id="update-asset-id" required>
+      </div>
+      <div class="form-group">
+        <label for="update-asset-name">Name:</label>
+        <input type="text" id="update-asset-name" required>
+      </div>
+      <div class="form-group">
+        <label for="update-asset-current-market-price">Current market price:</label>
+        <input type="number" id="update-asset-current-market-price" required>
+      </div>
+      <button onclick="updateAsset()">Update asset</button>
+      <div id="update-asset-message" class="message"></div>
+    </div>
+  </div>
+
+  <div id="delete-asset-tab" class="tab-content">
+    <div class="update-asset-form">
+      <h2>Delete asset</h2>
+      <div class="form-group">
+        <label for="delete-asset-id">Id:</label>
+        <input type="text" id="delete-asset-id" required>
+      </div>
+      <button onclick="deleteAsset()">Delete asset</button>
+      <div id="delete-asset-message" class="message"></div>
     </div>
   </div>
 
@@ -246,8 +294,8 @@
 
 
     async function createAsset() {
-      const name = document.getElementById('name').value;
-      const currentMarketPrice = document.getElementById('current-market-price').value;
+      const name = document.getElementById('create-asset-name').value;
+      const currentMarketPrice = document.getElementById('create-asset-current-market-price').value;
 
       try {
         const response = await fetch(`${API_BASE_URL}/assets`, {
@@ -255,7 +303,7 @@
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${getAuthToken()}`
-            },
+          },
           body: JSON.stringify({
             name: name,
             currentMarketPrice: currentMarketPrice
@@ -265,16 +313,128 @@
         const data = await response.json();
 
         if (response.ok) {
-          showMessage('create-asset', 'Asset created');
-          document.getElementById('name').value = '';
-          document.getElementById('current-market-price').value = '';
+          showMessage('create-asset-message', 'Asset created');
+          document.getElementById('create-asset-name').value = '';
+          document.getElementById('create-asset-current-market-price').value = '';
         } else {
-          showMessage('create-asset', data.errors || 'Create asset failed', true);
+          showMessage('create-asset-message', data.errors || 'Create asset failed', true);
         }
       } catch (error) {
         showMessage('create-asset-message', 'An error occurred during creating asset', true);
         console.error('Error on creating asset:', error);
       }
+    }
+
+    async function updateAsset() {
+      const id = document.getElementById('update-asset-id').value;
+      const name = document.getElementById('update-asset-name').value;
+      const currentMarketPrice = document.getElementById('update-asset-current-market-price').value;
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/assets/${id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${getAuthToken()}`
+          },
+          body: JSON.stringify({
+            name: name,
+            currentMarketPrice: currentMarketPrice
+          })
+        });
+
+        if (response.ok) {
+          showMessage('update-asset-message', 'Asset updated');
+          document.getElementById('update-asset-id').value = '';
+          document.getElementById('update-asset-name').value = '';
+          document.getElementById('update-asset-current-market-price').value = '';
+        } else {
+          showMessage('update-asset-message', data.errors || 'Update asset failed', true);
+        }
+      } catch (error) {
+        showMessage('update-asset-message', 'An error occurred during updating asset', true);
+        console.error('Error on update asset:', error);
+      }
+    }
+
+    async function deleteAsset() {
+      const id = document.getElementById('delete-asset-id').value;
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/assets/${id}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${getAuthToken()}`
+          }
+        });
+
+        if (response.ok) {
+          showMessage('delete-asset-message', 'Asset deleted');
+          document.getElementById('delete-asset-id').value = '';
+        } else {
+          showMessage('delete-asset-message', data.errors || 'Delete asset failed', true);
+        }
+      } catch (error) {
+        showMessage('delete-asset-message', 'An error occurred during deleting asset', true);
+        console.error('Error on delete asset:', error);
+      }
+    }
+
+    async function getAsset() {
+      const id = document.getElementById('get-asset-id').value;
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/assets/${id}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${getAuthToken()}`
+          }
+        });
+        const result = await response.json();
+        if (response.ok) {
+          showMessage('get-asset-message', 'Asset Get');
+          document.getElementById('get-asset-id').value = '';
+          displayAssetTable(result.data, "asset-result");
+
+        } else {
+          showMessage('get-asset-message', result.errors || 'Get asset failed', true);
+        }
+      } catch (error) {
+        showMessage('get-asset-message', 'An error occurred during getting asset', true);
+        console.error('Error on get asset:', error);
+      }
+    }
+
+    function displayAssetTable(assetData, container) {
+      const table = document.createElement('table');
+      const resultDiv = document.getElementById('asset-result')
+      table.style.width = '100%';
+      table.style.borderCollapse = 'collapse';
+      table.style.marginTop = '16px';
+
+      for (const [key, value] of Object.entries(assetData)) {
+        const row = table.insertRow();
+
+        const keyCell = row.insertCell();
+        keyCell.textContent = key;
+        keyCell.style.fontWeight = 'bold';
+        keyCell.style.padding = '8px';
+        keyCell.style.border = '1px solid #ddd';
+        keyCell.style.width = '30%';
+        keyCell.style.backgroundColor = '#f2f2f2';
+
+        const valueCell = row.insertCell();
+        valueCell.textContent = typeof value === 'object'
+          ? JSON.stringify(value)
+          : value;
+        valueCell.style.padding = '8px';
+        valueCell.style.border = '1px solid #ddd';
+        valueCell.style.wordBreak = 'break-word';
+      }
+
+      resultDiv.appendChild(table);
     }
   </script>
 </body>
