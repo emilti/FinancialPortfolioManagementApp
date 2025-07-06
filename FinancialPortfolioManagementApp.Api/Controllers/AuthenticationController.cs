@@ -3,13 +3,15 @@ using FinancialPortfolioManagementApp.Api.Common;
 using FinancialPortfolioManagementApp.Application.Authentication;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FinancialPortfolioManagementApp.Api.Controllers
 {
-    [Route("auth")]
+    [Route("api/auth")]
     [AllowAnonymous]
+    [EnableCors("AllowFrontend")]
     public class AuthenticationController : CustomControllerBase
     {
         private readonly ISender _mediator;
@@ -26,7 +28,7 @@ namespace FinancialPortfolioManagementApp.Api.Controllers
             RegisterCommand command = new RegisterCommand(request.Email, request.Password);
             var authResult = await _mediator.Send(command);
             
-            var response = Response<AuthenticationResult>.FromResult(authResult);
+            var response = ApiResponse<AuthenticationResult>.FromResult(authResult);
             
             if (response.Errors.Any())
             {
@@ -42,7 +44,7 @@ namespace FinancialPortfolioManagementApp.Api.Controllers
             LoginCommand command = new LoginCommand(request.Email, request.Password);
             var authResult = await _mediator.Send(command);
 
-            var response = Response<AuthenticationResult>.FromResult(authResult);
+            var response = ApiResponse<AuthenticationResult>.FromResult(authResult);
 
             if (response.Errors.Any())
             {

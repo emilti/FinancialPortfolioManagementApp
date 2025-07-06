@@ -33,14 +33,14 @@ namespace FinancialPortfolioManagementApp.Api.Controllers
             var query = new GetAssetByIdQuery(assetId);
             var result = await _mediator.Send(query);
 
-            var response = Response<Asset>.FromResult(result);
+            var response = ApiResponse<Asset>.FromResult(result);
 
             if (response.Errors.Any())
             {
                 return NotFound(new { Errors = response.Errors });
             }
 
-            var apiResponse = Mapper.Map<Response<AssetResponse>>(response);
+            var apiResponse = Mapper.Map<ApiResponse<AssetResponse>>(response);
 
             return Ok(apiResponse);
         }
@@ -51,17 +51,17 @@ namespace FinancialPortfolioManagementApp.Api.Controllers
             var command = new CreateAssetCommand(request.Name, request.CurrentMarketPrice);
             var result = await _mediator.Send(command);
 
-            var response = Response<Asset>.FromResult(result);
+            var response = ApiResponse<Asset>.FromResult(result);
 
             if (response.Errors.Any())
             {
                 return BadRequest(string.Join(',', response.Errors));
             }
 
-            var apiResponse = Mapper.Map<Response<AssetResponse>>(response);
+            var apiResponse = _mapper.Map<ApiResponse<AssetResponse>>(response);
 
             return CreatedAtAction(
-                nameof(GetAssetById), 
+                nameof(CreateAsset), 
                 new { id = apiResponse.Data?.Id },
                 response);
         }
@@ -72,7 +72,7 @@ namespace FinancialPortfolioManagementApp.Api.Controllers
             var command = new UpdateAssetCommand(assetId, request.Name, request.CurrentMarketPrice);
             var result = await _mediator.Send(command);
 
-            var response = Response<bool>.FromResult(result);
+            var response = ApiResponse<bool>.FromResult(result);
 
             if (response.Errors.Any())
             {
@@ -88,7 +88,7 @@ namespace FinancialPortfolioManagementApp.Api.Controllers
             var command = new DeleteAssetCommand(assetId);
             var result = await _mediator.Send(command);
 
-            var response = Response<bool>.FromResult(result);
+            var response = ApiResponse<bool>.FromResult(result);
 
             if (response.Errors.Any())
             {
@@ -101,10 +101,10 @@ namespace FinancialPortfolioManagementApp.Api.Controllers
         [HttpPost("{assetId:guid}/buy")]
         public async Task<IActionResult> BuyAsset(Guid assetId, [FromBody] BuyAssetRequest request)
         {
-            var command = new BuyAssetCommand(request.UserId, assetId, request.Quantity);
+            var command = new BuyAssetCommand(assetId, request.Quantity);
             var result = await _mediator.Send(command);
 
-            var response = Response<bool>.FromResult(result);
+            var response = ApiResponse<bool>.FromResult(result);
 
             if (response.Errors.Any())
             {
@@ -117,10 +117,10 @@ namespace FinancialPortfolioManagementApp.Api.Controllers
         [HttpPost("{assetId:guid}/sell")]
         public async Task<IActionResult> SellAsset(Guid assetId, [FromBody] SellAssetRequest request)
         {
-            var command = new SellAssetCommand(request.UserId, assetId, request.Quantity);
+            var command = new SellAssetCommand(assetId, request.Quantity);
             var result = await _mediator.Send(command);
 
-            var response = Response<bool>.FromResult(result);
+            var response = ApiResponse<bool>.FromResult(result);
 
             if (response.Errors.Any())
             {

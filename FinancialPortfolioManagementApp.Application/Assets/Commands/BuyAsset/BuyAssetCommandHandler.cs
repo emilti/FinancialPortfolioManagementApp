@@ -32,11 +32,7 @@ namespace FinancialPortfolioManagementApp.Application.Assets.Commands.BuyAsset
                 return Result.Failure<bool>("No authenticated user");
             }
 
-            if (new Guid(_currentUserService.UserId) != request.UserId)
-            {
-                return Result.Failure<bool>("Invalid request. Performed action is not authorized.");
-            }
-
+            Guid userId = new Guid(_currentUserService.UserId);
             if (request == null)
             {
                 return Result.Failure<bool>("Request cannot be null");
@@ -51,14 +47,14 @@ namespace FinancialPortfolioManagementApp.Application.Assets.Commands.BuyAsset
 
             try
             {
-                var holding = _holdingRepository.Get(request.UserId, request.AssetId);
+                var holding = _holdingRepository.Get(userId, request.AssetId);
 
                 if (holding == null)
                 {
                     holding = new Holding()
                     {
                         AssetId = request.AssetId,
-                        UserId = request.UserId,
+                        UserId = userId,
                         Quantity = request.Quantity
                     };
                     _holdingRepository.Add(holding);
@@ -79,7 +75,7 @@ namespace FinancialPortfolioManagementApp.Application.Assets.Commands.BuyAsset
                 var assetTransaction = new AssetTransaction()
                 {
                     AssetId = request.AssetId,
-                    UserId = request.UserId,
+                    UserId = userId,
                     PriceAtTransaction = asset.CurrentMarketPrice,
                     Quantity = request.Quantity,
                     Type = Domain.Enums.TransactionType.Buy,

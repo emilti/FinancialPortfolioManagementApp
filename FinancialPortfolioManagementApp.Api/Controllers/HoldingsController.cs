@@ -32,7 +32,7 @@ namespace FinancialPortfolioManagementApp.Api.Controllers
             var query = new GetHoldingsSummaryByUserIdQuery(userId);
             var result = await _mediator.Send(query);
 
-            var response = Response<HoldingsSummary>.FromResult(result);
+            var response = ApiResponse<HoldingsSummary>.FromResult(result);
 
             if (response.Errors.Any())
             {
@@ -50,7 +50,7 @@ namespace FinancialPortfolioManagementApp.Api.Controllers
             var query = new GetPortfolioMetricsByUserIdQuery(userId);
             var result = await _mediator.Send(query);
 
-            var response = Response<PortfolioMetrics>.FromResult(result);
+            var response = ApiResponse<PortfolioMetrics>.FromResult(result);
 
             if (response.Errors.Any())
             {
