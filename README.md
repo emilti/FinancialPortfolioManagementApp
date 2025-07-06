@@ -1,3 +1,3 @@
 # FinancialPortfolioManagementApp
 
-![Financial Portfolio Management Database Diagram](/docs/database/FinancialPortfolioManagementDb_Diagram.png)
+![Financial Portfolio Management Database Diagram](/docs/database/DatabaseDiagram.png)
