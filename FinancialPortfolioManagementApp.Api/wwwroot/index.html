@@ -507,7 +507,7 @@
         if (response.ok) {
           showMessage('get-user-holdings-message', 'User holdings');
           document.getElementById('get-user-holdings-result').innerHTML = '';
-          displayAssetTable(result.data, "get-user-holdings-result");
+          displayHoldingsTable(result.data, "get-user-holdings-result");
 
         } else {
           showMessage('get-user-holdings-message', result.errors || 'Get user holdings failed', true);
@@ -587,6 +587,102 @@
         valueCell.style.wordBreak = 'break-word';
       }
 
+      resultDiv.appendChild(table);
+    }
+
+    function displayHoldingsTable(data, container) {
+      const table = document.createElement('table');
+      const resultDiv = document.getElementById(container)
+      table.style.width = '100%';
+      table.style.borderCollapse = 'collapse';
+      table.style.marginTop = '16px';
+      const titleRow = table.insertRow();
+      const assetNameTitleCell = titleRow.insertCell();
+      assetNameTitleCell.textContent = "Asset name";
+      assetNameTitleCell.style.fontWeight = 'bold';
+      assetNameTitleCell.style.padding = '8px';
+      assetNameTitleCell.style.border = '1px solid #ddd';
+      assetNameTitleCell.style.width = '30%';
+      assetNameTitleCell.style.backgroundColor = '#f2f2f2';
+
+      const assetQuantityTitleCell = titleRow.insertCell();
+      assetQuantityTitleCell.textContent = "Quantity";
+      assetQuantityTitleCell.style.fontWeight = 'bold';
+      assetQuantityTitleCell.style.padding = '8px';
+      assetQuantityTitleCell.style.border = '1px solid #ddd';
+      assetQuantityTitleCell.style.width = '30%';
+      assetQuantityTitleCell.style.backgroundColor = '#f2f2f2';
+
+      const currentMarketPriceTitleCell = titleRow.insertCell();
+      currentMarketPriceTitleCell.textContent = "Current market price";
+      currentMarketPriceTitleCell.style.fontWeight = 'bold';
+      currentMarketPriceTitleCell.style.padding = '8px';
+      currentMarketPriceTitleCell.style.border = '1px solid #ddd';
+      currentMarketPriceTitleCell.style.width = '30%';
+      currentMarketPriceTitleCell.style.backgroundColor = '#f2f2f2';
+
+      const currentHoldingValueTitleCell = titleRow.insertCell();
+      currentHoldingValueTitleCell.textContent = "Holding value";
+      currentHoldingValueTitleCell.style.fontWeight = 'bold';
+      currentHoldingValueTitleCell.style.padding = '8px';
+      currentHoldingValueTitleCell.style.border = '1px solid #ddd';
+      currentHoldingValueTitleCell.style.width = '30%';
+      currentHoldingValueTitleCell.style.backgroundColor = '#f2f2f2';
+
+      for (const [key, value] of Object.entries(data.holdings)) {
+        const row = table.insertRow();
+
+        const keyCell = row.insertCell();
+        keyCell.textContent = value.asset.name;
+        keyCell.style.fontWeight = 'bold';
+        keyCell.style.padding = '8px';
+        keyCell.style.border = '1px solid #ddd';
+        keyCell.style.width = '30%';
+        keyCell.style.backgroundColor = '#f2f2f2';
+
+        const valueQuantityCell = row.insertCell();
+        valueQuantityCell.textContent = typeof value === 'object'
+          ? JSON.stringify(  value.quantity )
+          : value.quantity ;
+        valueQuantityCell.style.padding = '8px';
+        valueQuantityCell.style.border = '1px solid #ddd';
+        valueQuantityCell.style.wordBreak = 'break-word';
+
+        const currentMarketCell = row.insertCell();
+        currentMarketCell.textContent = typeof value === 'object'
+          ? JSON.stringify(value.asset.currentMarketPrice)
+          : value.asset.currentMarketPrice;
+        currentMarketCell.style.padding = '8px';
+        currentMarketCell.style.border = '1px solid #ddd';
+        currentMarketCell.style.wordBreak = 'break-word';
+
+        const holdingValueCell = row.insertCell();
+        holdingValueCell.textContent = typeof value === 'object'
+          ? JSON.stringify(value.asset.currentMarketPrice * value.quantity)
+          : value.asset.currentMarketPrice * value.quantity;
+        holdingValueCell.style.padding = '8px';
+        holdingValueCell.style.border = '1px solid #ddd';
+        holdingValueCell.style.wordBreak = 'break-word';
+      }
+
+      const rowTotal = table.insertRow();
+
+      const keyCellTotal = rowTotal.insertCell();
+      keyCellTotal.textContent = "Total value";
+      keyCellTotal.style.fontWeight = 'bold';
+      keyCellTotal.style.padding = '8px';
+      keyCellTotal.style.border = '1px solid #ddd';
+      keyCellTotal.style.width = '30%';
+      keyCellTotal.style.backgroundColor = '#f2f2f2';
+
+      const valueCellTotal = rowTotal.insertCell();
+      valueCellTotal.textContent = typeof value === 'object'
+        ? JSON.stringify(data.totalValue)
+        : data.totalValue;
+      valueCellTotal.style.padding = '8px';
+      valueCellTotal.style.border = '1px solid #ddd';
+      valueCellTotal.style.wordBreak = 'break-word';
+      valueCellTotal.style.width = '30%';
       resultDiv.appendChild(table);
     }
 

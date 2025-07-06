@@ -101,5 +101,48 @@ namespace FinancialPortfolioManagementApp.Infrastructure.Persistence
             builder.Ignore<IdentityUserLogin<string>>();
             builder.Ignore<IdentityUserClaim<string>>();
         }
+
+        public async Task SeedAssetsAsync()
+        {
+            if (!Assets.Any())
+            {
+                var assets = new List<Asset>
+            {
+                new Asset
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Gold",
+                    CurrentMarketPrice = 1950.50m
+                },
+                new Asset
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Silver",
+                    CurrentMarketPrice = 24.75m
+                },
+                new Asset
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Bitcoin",
+                    CurrentMarketPrice = 42500.00m
+                },
+                new Asset
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Apple Stock",
+                    CurrentMarketPrice = 175.25m
+                },
+                new Asset
+                {
+                    Id = Guid.NewGuid(),
+                    Name = "Tesla Stock",
+                    CurrentMarketPrice = 825.50m
+                }
+            };
+
+                await Assets.AddRangeAsync(assets);
+                await SaveChangesAsync();
+            }
+        }
     }
 }
