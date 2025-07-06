@@ -4,9 +4,9 @@ using FinancialPortfolioManagementApp.Domain.Entities;
 
 namespace FinancialPortfolioManagementApp.Application.Holdings.Configurations
 {
-    public class HoldingsProfile : Profile
+    public class HoldingApplicationProfile : Profile
     {
-        public HoldingsProfile()
+        public HoldingApplicationProfile()
         {
             CreateMap<Asset, AssetDto>();
             CreateMap<Holding, HoldingDto>()

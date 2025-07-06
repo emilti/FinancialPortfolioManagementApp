@@ -2,7 +2,7 @@
 using FinancialPortfolioManagementApp.Application.Shared.Common;
 using MediatR;
 
-namespace FinancialPortfolioManagementApp.Application.PortfolioUser.Query
+namespace FinancialPortfolioManagementApp.Application.Holdings.Query
 {
-    public record GetPortfolioMetricsByUserIdQuery(Guid userId) : IRequest<Result<PortfolioMetrics>>;
+    public record GetPortfolioMetricsQuery() : IRequest<Result<PortfolioMetrics>>;
 }

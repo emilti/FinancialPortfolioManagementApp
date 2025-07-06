@@ -5,31 +5,31 @@ using FinancialPortfolioManagementApp.Domain.Entities;
 using FinancialPortfolioManagementApp.Domain.Enums;
 using MediatR;
 
-namespace FinancialPortfolioManagementApp.Application.PortfolioUser.Query
+namespace FinancialPortfolioManagementApp.Application.Holdings.Query
 {
-    public class GetPortfolioMetricsByUserIdQueryHandler : IRequestHandler<GetPortfolioMetricsByUserIdQuery, Result<PortfolioMetrics>>
+    public class GetPortfolioMetricsQueryHandler : IRequestHandler<GetPortfolioMetricsQuery, Result<PortfolioMetrics>>
     {
-        private readonly IAssetRepository _assetRepository;
-
         private readonly IHoldingRepository _holdingRepository;
 
         private readonly IAssetTransactionRepository _assetTransactionRepository;
 
-        public GetPortfolioMetricsByUserIdQueryHandler(
-            IAssetRepository assetRepository,
+        private readonly ICurrentUserService _currentUserService;
+        public GetPortfolioMetricsQueryHandler(
             IHoldingRepository holdingRepository,
-            IAssetTransactionRepository assetTransactionRepository)
+            IAssetTransactionRepository assetTransactionRepository,
+            ICurrentUserService currentUserService)
         {
             _holdingRepository = holdingRepository;
-            _assetRepository = assetRepository;
             _assetTransactionRepository = assetTransactionRepository;
+            _currentUserService = currentUserService;
         }
         public async Task<Result<PortfolioMetrics>> Handle(
-                GetPortfolioMetricsByUserIdQuery request,
+                GetPortfolioMetricsQuery request,
                 CancellationToken cancellationToken)
         {
+            Guid userId = new Guid(_currentUserService.UserId);
             var userAssetTransactions = await _assetTransactionRepository
-               .GetByUserIdAsync(request.userId);
+               .GetByUserIdAsync(userId);
             var userAssetTransactionInfos = userAssetTransactions
                 .Select(x => new AssetTransactionInfo(
                     x.Quantity,
@@ -37,10 +37,14 @@ namespace FinancialPortfolioManagementApp.Application.PortfolioUser.Query
                     x.Type))
                 .ToList();
             decimal totalInvestedAmount = GetTotalInvestedAmoutAsync(userAssetTransactions);
-            var holdings = await _holdingRepository.GetByUserIdAsync(request.userId);
+            var holdings = await _holdingRepository.GetByUserIdAsync(userId);
             List<AssetInfo> assetInfos = GetCurrentMarketValues(holdings);
             decimal currentTotalValue = GetCurrentTotalValue(holdings);
-            decimal returnOnInvestment = ((currentTotalValue - totalInvestedAmount) * 100) / totalInvestedAmount;
+            decimal returnOnInvestment = 0;
+            if (totalInvestedAmount > 0)
+            {
+                returnOnInvestment = ((currentTotalValue - totalInvestedAmount) * 100) / totalInvestedAmount;
+            }
 
             PortfolioMetrics portfolioMetrics = new PortfolioMetrics()
             {

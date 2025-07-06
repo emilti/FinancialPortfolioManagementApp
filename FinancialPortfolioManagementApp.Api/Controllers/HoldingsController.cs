@@ -1,12 +1,8 @@
 ﻿using AutoMapper;
 using FinancialPortfolioManagementApp.Api.Common;
 using FinancialPortfolioManagementApp.Api.Models.Assets.Response;
-using FinancialPortfolioManagementApp.Application.Assets.Queries;
+using FinancialPortfolioManagementApp.Application.Holdings.Query;
 using FinancialPortfolioManagementApp.Application.Holdings.Query.GetHoldingsSummaryByUserId;
-using FinancialPortfolioManagementApp.Application.Holdings.Query.GetHoldingsSummaryByUserId.Models;
-using FinancialPortfolioManagementApp.Application.Holdings.Query.GetPortfolioMetricsByUserId.Models;
-using FinancialPortfolioManagementApp.Application.PortfolioUser.Query;
-using FinancialPortfolioManagementApp.Domain.Entities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -27,37 +23,40 @@ namespace FinancialPortfolioManagementApp.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetHoldingsSummaryByUserId([FromQuery] Guid userId)
+        public async Task<IActionResult> GetHoldingsSummaryAsync()
         {
-            var query = new GetHoldingsSummaryByUserIdQuery(userId);
+            var query = new GetHoldingsSummaryQuery();
             var result = await _mediator.Send(query);
-
-            var response = Response<HoldingsSummary>.FromResult(result);
-
-            if (response.Errors.Any())
+            
+            if (result == null || result.Data == null)
             {
-                return NotFound(new { Errors = response.Errors });
+               return NotFound(new { Errors = result.Errors });
             }
 
-            //var apiResponse = Mapper.Map<Response<AssetResponse>>(response);
+            if (result.Errors.Any())
+            {
+                return BadRequest(string.Join(',', result.Errors));
+            }
 
-            return Ok(response);
+            var apiResult = _mapper.Map<HoldingsSummaryResponse>(result.Data);
+            var apiResponse = ApiResponse<HoldingsSummaryResponse>.FromResult(apiResult);
+
+            return Ok(apiResponse);
         }
 
         [HttpGet("metrics")]
-        public async Task<IActionResult> GetPortfolioMetricsByUserId([FromQuery] Guid userId)
+        public async Task<IActionResult> GetPortfolioMetricsAsync()
         {
-            var query = new GetPortfolioMetricsByUserIdQuery(userId);
+            var query = new GetPortfolioMetricsQuery();
             var result = await _mediator.Send(query);
-
-            var response = Response<PortfolioMetrics>.FromResult(result);
-
-            if (response.Errors.Any())
+          
+            if (result.Errors.Any())
             {
-                return NotFound(new { Errors = response.Errors });
+                return BadRequest(new { Errors = result.Errors });
             }
 
-            //var apiResponse = Mapper.Map<Response<AssetResponse>>(response);
+            var apiResult = _mapper.Map<PortfolioMetricsResponse>(result.Data);
+            var response = ApiResponse<PortfolioMetricsResponse>.FromResult(apiResult);
 
             return Ok(response.Data);
         }

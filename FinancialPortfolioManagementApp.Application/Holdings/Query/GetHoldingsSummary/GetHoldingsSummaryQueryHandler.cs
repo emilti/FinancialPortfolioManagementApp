@@ -7,21 +7,28 @@ using MediatR;
 
 namespace FinancialPortfolioManagementApp.Application.Holdings.Query.GetHoldingsSummaryByUserId
 {
-    public class GetHoldingsSummaryByUserIdQueryHandler : IRequestHandler<GetHoldingsSummaryByUserIdQuery, Result<HoldingsSummary>>
+    public class GetHoldingsSummaryQueryHandler : IRequestHandler<GetHoldingsSummaryQuery, Result<HoldingsSummary>>
     {
         private readonly IHoldingRepository _holdingRepository;
 
         private readonly IMapper _mapper;
-        public GetHoldingsSummaryByUserIdQueryHandler(IHoldingRepository holdingRepository, IMapper mapper)
+
+        private readonly ICurrentUserService _currentUserService;
+        public GetHoldingsSummaryQueryHandler(
+            IHoldingRepository holdingRepository,
+            IMapper mapper,
+            ICurrentUserService currentUserService)
         {
             _holdingRepository = holdingRepository;
             _mapper = mapper;
+            _currentUserService = currentUserService;
         }
         public async Task<Result<HoldingsSummary>> Handle(
-                GetHoldingsSummaryByUserIdQuery request,
+                GetHoldingsSummaryQuery request,
                 CancellationToken cancellationToken)
         {
-            var holdings = await _holdingRepository.GetByUserIdAsync(request.userId);
+            Guid userId = new Guid(_currentUserService.UserId);
+            var holdings = await _holdingRepository.GetByUserIdAsync(userId);
             decimal? totalValue = GetTotalValue(holdings);
 
             var resultHoldings = _mapper.Map<List<HoldingDto>>(holdings.ToList());

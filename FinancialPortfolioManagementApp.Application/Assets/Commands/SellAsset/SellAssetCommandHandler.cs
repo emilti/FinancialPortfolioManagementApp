@@ -47,12 +47,8 @@ namespace FinancialPortfolioManagementApp.Application.Assets.Commands.SellAsset
                     return Result.Failure<bool>("No authenticated user");
                 }
 
-                if (new Guid(_currentUserService.UserId) != request.UserId)
-                {
-                    return Result.Failure<bool>("Invalid request. Performed action is not authorized.");
-                }
-
-                var holding = _holdingRepository.Get(request.UserId, request.AssetId);
+                Guid userId = new Guid(_currentUserService.UserId);
+                var holding = await _holdingRepository.GetAsync(userId, request.AssetId);
 
                 if (holding == null)
                 {
@@ -74,7 +70,7 @@ namespace FinancialPortfolioManagementApp.Application.Assets.Commands.SellAsset
                 var assetTransaction = new AssetTransaction()
                 {
                     AssetId = request.AssetId,
-                    UserId = request.UserId,
+                    UserId = userId,
                     PriceAtTransaction = asset.CurrentMarketPrice,
                     Quantity = request.Quantity,
                     Type = Domain.Enums.TransactionType.Sell,

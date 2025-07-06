@@ -4,7 +4,7 @@ namespace FinancialPortfolioManagementApp.Application.Shared.Contracts
 {
     public interface IHoldingRepository
     {
-        public Holding Get(Guid UserId, Guid AssetId);
+        Task<Holding> GetAsync(Guid userId, Guid assetId);
 
         Task<IEnumerable<Holding>> GetByUserIdAsync(Guid userId);
 

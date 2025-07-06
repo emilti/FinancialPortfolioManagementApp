@@ -1,0 +1,624 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .auth-form {
+      border: 1px solid #ddd;
+      padding: 20px;
+      border-radius: 5px;
+      background-color: #f9f9f9;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+
+    input {
+      width: 100%;
+      padding: 8px;
+      box-sizing: border-box;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+      button:hover {
+        background-color: #45a049;
+      }
+
+    .error {
+      color: red;
+      margin-top: 10px;
+    }
+
+    .success {
+      color: green;
+      margin-top: 10px;
+    }
+
+    .tabs {
+      display: flex;
+      margin-bottom: 20px;
+    }
+
+    .tab {
+      padding: 10px 20px;
+      cursor: pointer;
+      background-color: #f1f1f1;
+      border: 1px solid #ddd;
+      border-bottom: none;
+      border-radius: 5px 5px 0 0;
+      margin-right: 5px;
+    }
+
+      .tab.active {
+        background-color: #4CAF50;
+        color: white;
+      }
+
+    .tab-content {
+      display: none;
+    }
+
+      .tab-content.active {
+        display: block;
+      }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="tabs">
+      <div class="tab active" onclick="switchTab('login-tab')">Login</div>
+      <div class="tab" onclick="switchTab('register-tab')">Register</div>
+      <div class="tab" onclick="switchTab('get-asset-tab')">Get asset</div>
+      <div class="tab" onclick="switchTab('create-asset-tab')">Create asset</div>
+      <div class="tab" onclick="switchTab('update-asset-tab')">Update asset</div>
+      <div class="tab" onclick="switchTab('delete-asset-tab')">Delete asset</div>
+      <div class="tab" onclick="switchTab('buy-asset-tab')">Buy asset</div>
+      <div class="tab" onclick="switchTab('sell-asset-tab')">Sell asset</div>
+      <div class="tab" onclick="switchTab('get-user-holdings-tab')">Get user holdings</div>
+      <div class="tab" onclick="switchTab('get-user-metrics-tab')">Get user metrics</div>
+    </div>
+
+    <div id="login-tab" class="tab-content active">
+      <div class="auth-form">
+        <h2>Login</h2>
+        <div class="form-group">
+          <label for="login-email">Email:</label>
+          <input type="email" id="login-email" required>
+        </div>
+        <div class="form-group">
+          <label for="login-password">Password:</label>
+          <input type="password" id="login-password" required>
+        </div>
+        <button onclick="login()">Login</button>
+        <div id="login-message" class="message"></div>
+      </div>
+    </div>
+
+    <div id="register-tab" class="tab-content">
+      <div class="auth-form">
+        <h2>Register</h2>
+        <div class="form-group">
+          <label for="register-email">Email:</label>
+          <input type="email" id="register-email" required>
+        </div>
+        <div class="form-group">
+          <label for="register-password">Password:</label>
+          <input type="password" id="register-password" required>
+        </div>
+        <button onclick="register()">Register</button>
+        <div id="register-message" class="message"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="get-asset-tab" class="tab-content">
+    <div class="get-asset-form">
+      <h2>Get asset</h2>
+      <div class="form-group">
+        <label for="get-asset-id">Id:</label>
+        <input type="text" id="get-asset-id" required>
+      </div>
+      <button onclick="getAsset()">Get asset</button>
+      <div id="get-asset-message" class="message"></div>
+      <div id="asset-result" class="result-container"></div>
+    </div>
+  </div>
+
+  <div id="create-asset-tab" class="tab-content">
+    <div class="create-asset-form">
+      <h2>Create asset</h2>
+      <div class="form-group">
+        <label for="create-asset-name">Name:</label>
+        <input type="text" id="create-asset-name" required>
+      </div>
+      <div class="form-group">
+        <label for="create-asset-current-market-price">Current market price:</label>
+        <input type="number" id="create-asset-current-market-price" required>
+      </div>
+      <button onclick="createAsset()">Create asset</button>
+      <div id="create-asset-message" class="message"></div>
+    </div>
+  </div>
+
+  <div id="update-asset-tab" class="tab-content">
+    <div class="update-asset-form">
+      <h2>Update asset</h2>
+      <div class="form-group">
+        <label for="update-asset-id">Id:</label>
+        <input type="text" id="update-asset-id" required>
+      </div>
+      <div class="form-group">
+        <label for="update-asset-name">Name:</label>
+        <input type="text" id="update-asset-name" required>
+      </div>
+      <div class="form-group">
+        <label for="update-asset-current-market-price">Current market price:</label>
+        <input type="number" id="update-asset-current-market-price" required>
+      </div>
+      <button onclick="updateAsset()">Update asset</button>
+      <div id="update-asset-message" class="message"></div>
+    </div>
+  </div>
+
+  <div id="delete-asset-tab" class="tab-content">
+    <div class="update-asset-form">
+      <h2>Delete asset</h2>
+      <div class="form-group">
+        <label for="delete-asset-id">Id:</label>
+        <input type="text" id="delete-asset-id" required>
+      </div>
+      <button onclick="deleteAsset()">Delete asset</button>
+      <div id="delete-asset-message" class="message"></div>
+    </div>
+  </div>
+
+  <div id="buy-asset-tab" class="tab-content">
+    <div class="buy-asset-form">
+      <h2>Buy asset</h2>
+      <div class="form-group">
+        <label for="buy-asset-id">Id:</label>
+        <input type="text" id="buy-asset-id" required>
+      </div>
+      <div class="form-group">
+        <label for="buy-asset-quantity">Quantity:</label>
+        <input type="number" id="buy-asset-quantity" required>
+      </div>
+      <button onclick="buyAsset()">Buy asset</button>
+      <div id="buy-asset-message" class="message"></div>
+    </div>
+  </div>
+
+  <div id="sell-asset-tab" class="tab-content">
+    <div class="sell-asset-form">
+      <h2>Sell asset</h2>
+      <div class="form-group">
+        <label for="sell-asset-id">Id:</label>
+        <input type="text" id="sell-asset-id" required>
+      </div>
+      <div class="form-group">
+        <label for="sell-asset-quantity">Quantity:</label>
+        <input type="number" id="sell-asset-quantity" required>
+      </div>
+      <button onclick="sellAsset()">Sell asset</button>
+      <div id="sell-asset-message" class="message"></div>
+    </div>
+  </div>
+
+  <div id="get-user-holdings-tab" class="tab-content">
+    <div class="get-user-holdings-form">
+      <h2>Get user holdings</h2>
+      <button onclick="getUserHoldings()">Show user holdings</button>
+      <div id="get-user-holdings-message" class="message"></div>
+      <div id="get-user-holdings-result" class="result-container"></div>
+    </div>
+  </div>
+
+  <div id="get-user-metrics-tab" class="tab-content">
+    <div class="get-user-metrics-form">
+      <h2>Get user metrics</h2>
+      <button onclick="getUserMetrics()">Show user metrics</button>
+      <div id="get-user-metrics-message" class="message"></div>
+      <div id="get-user-metrics-result" class="result-container"></div>
+    </div>
+  </div>
+  <script src="config.js"></script>
+  <script>
+    const API_CONFIG = window.API_CONFIG;
+    const getAuthToken = () => {
+      return localStorage.getItem('authToken');
+    };
+
+    async function login() {
+      const email = document.getElementById('login-email').value;
+      const password = document.getElementById('login-password').value;
+
+      try {
+        const response = await fetch(`${API_CONFIG.API_BASE_URL}/auth/login`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            email: email,
+            password: password
+          })
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          showMessage('login-message', 'Login successful!');
+          if (result.data.token) {
+            localStorage.setItem('authToken', result.data.token);
+          }
+        } else {
+          showMessage('login-message', data.errors || 'Login failed', true);
+        }
+      } catch (error) {
+        showMessage('login-message', 'An error occurred during login', true);
+        console.error('Login error:', error);
+      }
+    }
+
+    async function register() {
+      const email = document.getElementById('register-email').value;
+      const password = document.getElementById('register-password').value;
+
+      try {
+        const response = await fetch(`${API_CONFIG.API_BASE_URL}/auth/register`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            email: email,
+            password: password
+          })
+        });
+
+        const data = await response.json();
+
+        if (response.ok) {
+          showMessage('register-message', 'Registration successful! You can now login.');
+          document.getElementById('register-email').value = '';
+          document.getElementById('register-password').value = '';
+          switchTab('login');
+        } else {
+          showMessage('register-message', data.errors || 'Registration failed', true);
+        }
+      } catch (error) {
+        showMessage('register-message', 'An error occurred during registration', true);
+        console.error('Registration error:', error);
+      }
+    }
+
+
+    async function createAsset() {
+      const name = document.getElementById('create-asset-name').value;
+      const currentMarketPrice = document.getElementById('create-asset-current-market-price').value;
+
+      try {
+        const response = await fetch(`${API_CONFIG.API_BASE_URL}/assets`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${getAuthToken()}`
+          },
+          body: JSON.stringify({
+            name: name,
+            currentMarketPrice: currentMarketPrice
+          })
+        });
+
+        if (response.ok) {
+          showMessage('create-asset-message', 'Asset created');
+          document.getElementById('create-asset-name').value = '';
+          document.getElementById('create-asset-current-market-price').value = '';
+        } else {
+          showMessage('create-asset-message', data.errors || 'Create asset failed', true);
+        }
+      } catch (error) {
+        showMessage('create-asset-message', 'An error occurred during creating asset', true);
+        console.error('Error on creating asset:', error);
+      }
+    }
+
+    async function updateAsset() {
+      const id = document.getElementById('update-asset-id').value;
+      const name = document.getElementById('update-asset-name').value;
+      const currentMarketPrice = document.getElementById('update-asset-current-market-price').value;
+
+      try {
+        const response = await fetch(`${API_CONFIG.API_BASE_URL}/assets/${id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${getAuthToken()}`
+          },
+          body: JSON.stringify({
+            name: name,
+            currentMarketPrice: currentMarketPrice
+          })
+        });
+
+        if (response.ok) {
+          showMessage('update-asset-message', 'Asset updated');
+          document.getElementById('update-asset-id').value = '';
+          document.getElementById('update-asset-name').value = '';
+          document.getElementById('update-asset-current-market-price').value = '';
+        } else {
+          showMessage('update-asset-message', data.errors || 'Update asset failed', true);
+        }
+      } catch (error) {
+        showMessage('update-asset-message', 'An error occurred during updating asset', true);
+        console.error('Error on update asset:', error);
+      }
+    }
+
+    async function deleteAsset() {
+      const id = document.getElementById('delete-asset-id').value;
+
+      try {
+        const response = await fetch(`${API_CONFIG.API_BASE_URL}/assets/${id}`, {
+          method: 'DELETE',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${getAuthToken()}`
+          }
+        });
+
+        if (response.ok) {
+          showMessage('delete-asset-message', 'Asset deleted');
+          document.getElementById('delete-asset-id').value = '';
+        } else {
+          showMessage('delete-asset-message', data.errors || 'Delete asset failed', true);
+        }
+      } catch (error) {
+        showMessage('delete-asset-message', 'An error occurred during deleting asset', true);
+        console.error('Error on delete asset:', error);
+      }
+    }
+
+    async function getAsset() {
+      const id = document.getElementById('get-asset-id').value;
+
+      try {
+        const response = await fetch(`${API_CONFIG.API_BASE_URL}/assets/${id}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${getAuthToken()}`
+          }
+        });
+        const result = await response.json();
+        if (response.ok) {
+          showMessage('get-asset-message', 'Asset Get');
+          document.getElementById('get-asset-id').value = '';
+          displayAssetTable(result.data, "asset-result");
+
+        } else {
+          showMessage('get-asset-message', result.errors || 'Get asset failed', true);
+        }
+      } catch (error) {
+        showMessage('get-asset-message', 'An error occurred during getting asset', true);
+        console.error('Error on get asset:', error);
+      }
+    }
+
+    async function buyAsset() {
+      const id = document.getElementById('buy-asset-id').value;
+      const quantity = document.getElementById('buy-asset-quantity').value;
+
+      try {
+        const response = await fetch(`${API_CONFIG.API_BASE_URL}/assets/${id}/buy`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${getAuthToken()}`
+          },
+          body: JSON.stringify({
+            quantity: quantity,
+
+          })
+        });
+
+        if (response.ok) {
+          showMessage('buy-asset-message', 'Asset bought');
+        } else {
+          showMessage('buy-asset-message', data.errors || 'Buy asset failed', true);
+        }
+      } catch (error) {
+        showMessage('buy-asset-message', 'An error occurred during buying asset', true);
+        console.error('Error on buying asset:', error);
+      }
+    }
+
+    async function sellAsset() {
+      const id = document.getElementById('sell-asset-id').value;
+      const quantity = document.getElementById('sell-asset-quantity').value;
+
+      try {
+        const response = await fetch(`${API_CONFIG.API_BASE_URL}/assets/${id}/sell`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${getAuthToken()}`
+          },
+          body: JSON.stringify({
+            quantity: quantity,
+
+          })
+        });
+
+        if (response.ok) {
+          showMessage('sell-asset-message', 'Asset sold');
+        } else {
+          showMessage('sell-asset-message', data.errors || 'Sell asset failed', true);
+        }
+      } catch (error) {
+        showMessage('sell-asset-message', 'An error occurred during selling asset', true);
+        console.error('Error on selling asset:', error);
+      }
+    }
+
+    async function getUserHoldings() {
+      try {
+        const response = await fetch(`${API_CONFIG.API_BASE_URL}/holdings`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${getAuthToken()}`
+          }
+        });
+        const result = await response.json();
+        if (response.ok) {
+          showMessage('get-user-holdings-message', 'User holdings');
+          document.getElementById('get-user-holdings-result').innerHTML = '';
+          displayAssetTable(result.data, "get-user-holdings-result");
+
+        } else {
+          showMessage('get-user-holdings-message', result.errors || 'Get user holdings failed', true);
+        }
+      } catch (error) {
+        showMessage('get-user-holdings-message', 'An error occurred during getting user holdings', true);
+        console.error('Error on get user holdings:', error);
+      }
+    }
+
+    async function getUserMetrics() {
+      try {
+        const response = await fetch(`${API_CONFIG.API_BASE_URL}/holdings/metrics`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${getAuthToken()}`
+          }
+        });
+        const result = await response.json();
+        if (response.ok) {
+          showMessage('get-user-metrics-message', 'User metrics');
+          document.getElementById('get-user-metrics-result').innerHTML = '';
+          displayMetricsTable(result, "get-user-metrics-result");
+
+        } else {
+          showMessage('get-user-metrics-message', result.errors || 'Get user metrics failed', true);
+        }
+      } catch (error) {
+        showMessage('get-user-metrics-message', 'An error occurred during getting user metrics', true);
+        console.error('Error on get user metrics:', error);
+      }
+    }
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.remove('active');
+      });
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+
+      document.getElementById(tabId).classList.add('active');
+      document.querySelector(`.tab[onclick="switchTab('${tabId}')"]`).classList.add('active');
+    }
+
+    function showMessage(elementId, message, isError = false) {
+      const element = document.getElementById(elementId);
+      element.textContent = message;
+      element.className = isError ? 'error' : 'success';
+    }
+
+    function displayAssetTable(assetData, container) {
+      const table = document.createElement('table');
+      const resultDiv = document.getElementById(container)
+      table.style.width = '100%';
+      table.style.borderCollapse = 'collapse';
+      table.style.marginTop = '16px';
+
+      for (const [key, value] of Object.entries(assetData)) {
+        const row = table.insertRow();
+
+        const keyCell = row.insertCell();
+        keyCell.textContent = key;
+        keyCell.style.fontWeight = 'bold';
+        keyCell.style.padding = '8px';
+        keyCell.style.border = '1px solid #ddd';
+        keyCell.style.width = '30%';
+        keyCell.style.backgroundColor = '#f2f2f2';
+
+        const valueCell = row.insertCell();
+        valueCell.textContent = typeof value === 'object'
+          ? JSON.stringify(value)
+          : value;
+        valueCell.style.padding = '8px';
+        valueCell.style.border = '1px solid #ddd';
+        valueCell.style.wordBreak = 'break-word';
+      }
+
+      resultDiv.appendChild(table);
+    }
+
+    function displayMetricsTable(metricsData, container) {
+      const table = document.createElement('table');
+      const resultDiv = document.getElementById(container)
+      table.style.width = '100%';
+      table.style.borderCollapse = 'collapse';
+      table.style.marginTop = '16px';
+
+      for (const [key, value] of Object.entries(metricsData)) {
+        const row = table.insertRow();
+
+        const keyCell = row.insertCell();
+        keyCell.textContent = key;
+        keyCell.style.fontWeight = 'bold';
+        keyCell.style.padding = '8px';
+        keyCell.style.border = '1px solid #ddd';
+        keyCell.style.width = '30%';
+        keyCell.style.backgroundColor = '#f2f2f2';
+
+        const valueCell = row.insertCell();
+        valueCell.textContent = typeof value === 'object'
+          ? JSON.stringify(value)
+          : value;
+        valueCell.style.padding = '8px';
+        valueCell.style.border = '1px solid #ddd';
+        valueCell.style.wordBreak = 'break-word';
+      }
+
+      resultDiv.appendChild(table);
+    }
+  </script>
+</body>
+</html>

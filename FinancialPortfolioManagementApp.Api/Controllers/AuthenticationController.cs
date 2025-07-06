@@ -3,13 +3,15 @@ using FinancialPortfolioManagementApp.Api.Common;
 using FinancialPortfolioManagementApp.Application.Authentication;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FinancialPortfolioManagementApp.Api.Controllers
 {
-    [Route("auth")]
+    [Route("api/auth")]
     [AllowAnonymous]
+    [EnableCors("AllowFrontend")]
     public class AuthenticationController : CustomControllerBase
     {
         private readonly ISender _mediator;
@@ -21,33 +23,33 @@ namespace FinancialPortfolioManagementApp.Api.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register(RegisterRequest request)
+        public async Task<IActionResult> RegisterAsync(RegisterRequest request)
         {
             RegisterCommand command = new RegisterCommand(request.Email, request.Password);
-            var authResult = await _mediator.Send(command);
+            var result = await _mediator.Send(command);
             
-            var response = Response<AuthenticationResult>.FromResult(authResult);
-            
-            if (response.Errors.Any())
+            if (result.Errors.Any())
             {
-                return BadRequest(String.Join(',', response.Errors));
+                return BadRequest(String.Join(',', result.Errors));
             }
+
+            var response = ApiResponse<AuthenticationResult>.FromResult(result);
 
             return Ok(response);
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginRequest request)
+        public async Task<IActionResult> LoginAsync(LoginRequest request)
         {
             LoginCommand command = new LoginCommand(request.Email, request.Password);
-            var authResult = await _mediator.Send(command);
+            var result = await _mediator.Send(command);
 
-            var response = Response<AuthenticationResult>.FromResult(authResult);
-
-            if (response.Errors.Any())
+            if (result.Errors.Any())
             {
-                return BadRequest(String.Join(',', response.Errors));
+                return BadRequest(String.Join(',', result.Errors));
             }
+
+            var response = ApiResponse<AuthenticationResult>.FromResult(result);
 
             return Ok(response);
         }

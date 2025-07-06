@@ -5,9 +5,25 @@ using FinancialPortfolioManagementApp.Application.Shared.Extensions;
 using FinancialPortfolioManagementApp.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using System.Reflection;
-using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
+
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend",
+        policy =>
+        {
+            policy.WithOrigins(
+                    "http://localhost",  
+                    "http://localhost:5063", 
+                    "https://localhost:7276"
+                )
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .SetIsOriginAllowedToAllowWildcardSubdomains();
+        });
+});
 
 builder.Services.AddControllers();
 builder.Services.AddControllers(options =>
@@ -16,8 +32,9 @@ builder.Services.AddControllers(options =>
 
 });
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddAutoMapper(typeof(AssetMappingProfile));
-builder.Services.AddAutoMapper(typeof(HoldingsProfile));
+builder.Services.AddAutoMapper(typeof(HoldingApiMappingProfile));
+builder.Services.AddAutoMapper(typeof(AssetApiMappingProfile));
+builder.Services.AddAutoMapper(typeof(HoldingApplicationProfile));
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
@@ -25,9 +42,11 @@ builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.Get
 var app = builder.Build();
 
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.UseMiddleware<ExceptionMiddleware>();
+app.UseStaticFiles();
 app.UseRouting();
+app.UseCors("AllowFrontend");
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

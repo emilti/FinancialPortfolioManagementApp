@@ -15,9 +15,9 @@ namespace FinancialPortfolioManagementApp.Infrastructure.Repositories
             _dbContext = dbContext;
         }
 
-        public Holding Get(Guid userId, Guid assetId)
+        public async Task<Holding> GetAsync(Guid userId, Guid assetId)
         {
-            return _dbContext.Holdings.FirstOrDefault(x => x.UserId == userId && x.AssetId == assetId);
+            return await _dbContext.Holdings.FirstOrDefaultAsync(x => x.UserId == userId && x.AssetId == assetId);
         }
 
         public async Task<IEnumerable<Holding>> GetByUserIdAsync(Guid userId)

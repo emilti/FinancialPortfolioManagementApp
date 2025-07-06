@@ -7,9 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Models\PortfolioUser\**" />
+    <Content Remove="Models\PortfolioUser\**" />
+    <EmbeddedResource Remove="Models\PortfolioUser\**" />
+    <None Remove="Models\PortfolioUser\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="14.0.0" />
     <PackageReference Include="MediatR" Version="12.5.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="9.0.6" />
+    <PackageReference Include="Microsoft.AspNetCore.Cors" Version="2.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="9.0.6" />
@@ -22,10 +30,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\FinancialPortfolioManagementApp.Infrastructure\FinancialPortfolioManagementApp.Infrastructure.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Models\PortfolioUser\Requests\" />
   </ItemGroup>
 
 </Project>

@@ -1,6 +1,4 @@
-﻿using FinancialPortfolioManagementApp.Domain.Entities;
-
-namespace FinancialPortfolioManagementApp.Application.Holdings.Query.GetHoldingsSummaryByUserId.Models
+﻿namespace FinancialPortfolioManagementApp.Application.Holdings.Query.GetHoldingsSummaryByUserId.Models
 {
     public class HoldingsSummary
     {
