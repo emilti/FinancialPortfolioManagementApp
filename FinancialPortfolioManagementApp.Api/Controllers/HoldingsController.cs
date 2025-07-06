@@ -27,9 +27,9 @@ namespace FinancialPortfolioManagementApp.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetHoldingsSummaryByUserIdAsync([FromQuery] Guid userId)
+        public async Task<IActionResult> GetHoldingsSummaryByUserIdAsync()
         {
-            var query = new GetHoldingsSummaryByUserIdQuery(userId);
+            var query = new GetHoldingsSummaryByUserIdQuery();
             var result = await _mediator.Send(query);
 
             var response = ApiResponse<HoldingsSummary>.FromResult(result);

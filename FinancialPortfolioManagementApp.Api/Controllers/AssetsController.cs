@@ -60,10 +60,7 @@ namespace FinancialPortfolioManagementApp.Api.Controllers
 
             var apiResponse = _mapper.Map<ApiResponse<AssetResponse>>(response);
 
-            return CreatedAtAction(
-                nameof(CreateAssetAsync), 
-                new { id = apiResponse.Data?.Id },
-                response);
+            return Ok(apiResponse);
         }
 
         [HttpPut("{assetId:guid}")]
