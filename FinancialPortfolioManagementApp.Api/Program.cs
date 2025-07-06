@@ -15,13 +15,10 @@ builder.Services.AddCors(options =>
         policy =>
         {
             policy.WithOrigins(
-                    "http://localhost",  
-                    "http://localhost:5063", 
-                    "https://localhost:7276"
-                )
-                .AllowAnyHeader()
-                .AllowAnyMethod()
-                .SetIsOriginAllowedToAllowWildcardSubdomains();
+                "https://localhost:5063")
+            .AllowAnyMethod()
+            .AllowAnyHeader()
+            .AllowCredentials();
         });
 });
 
@@ -37,13 +34,25 @@ builder.Services.AddAutoMapper(typeof(AssetApiMappingProfile));
 builder.Services.AddAutoMapper(typeof(HoldingApplicationProfile));
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
-
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(Assembly.GetExecutingAssembly()));
+
 var app = builder.Build();
 
-
-//app.UseHttpsRedirection();
 app.UseMiddleware<ExceptionMiddleware>();
+app.Use(async (context, next) =>
+{
+    if (context.Request.Method == "OPTIONS")
+    {
+        context.Response.StatusCode = 204;  // No Content
+        await context.Response.CompleteAsync();
+        return;
+    }
+    await next();
+});
+
+app.UseHttpsRedirection();
+app.UseCors("AllowFrontend");
+
 app.UseStaticFiles();
 app.UseRouting();
 app.UseCors("AllowFrontend");
