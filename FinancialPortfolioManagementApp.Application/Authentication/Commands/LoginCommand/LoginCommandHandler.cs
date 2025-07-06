@@ -2,7 +2,7 @@
 using FinancialPortfolioManagementApp.Application.Shared.Contracts;
 using MediatR;
 
-namespace FinancialPortfolioManagementApp.Application.Authentication
+namespace FinancialPortfolioManagementApp.Application.Authentication.Commands.LoginCommand
 {
     public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<AuthenticationResult>>
     {

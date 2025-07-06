@@ -101,6 +101,7 @@
     <div class="tabs">
       <div class="tab active" onclick="switchTab('login-tab')">Login</div>
       <div class="tab" onclick="switchTab('register-tab')">Register</div>
+      <div class="tab" onclick="switchTab('get-all-assets-tab')">Get all assets</div>
       <div class="tab" onclick="switchTab('get-asset-tab')">Get asset</div>
       <div class="tab" onclick="switchTab('create-asset-tab')">Create asset</div>
       <div class="tab" onclick="switchTab('update-asset-tab')">Update asset</div>
@@ -141,6 +142,15 @@
         <button onclick="register()">Register</button>
         <div id="register-message" class="message"></div>
       </div>
+    </div>
+  </div>
+
+  <div id="get-all-assets-tab" class="tab-content">
+    <div class="get-asset-form">
+      <h2>Get all assets</h2>
+      <button onclick="getAllAssets()">Get all assets</button>
+      <div id="get-all-assets-message" class="message"></div>
+      <div id="get-all-assets-result" class="result-container"></div>
     </div>
   </div>
 
@@ -315,7 +325,7 @@
           showMessage('register-message', 'Registration successful! You can now login.');
           document.getElementById('register-email').value = '';
           document.getElementById('register-password').value = '';
-          switchTab('login');
+          switchTab('login-tab');
         } else {
           showMessage('register-message', data.errors || 'Registration failed', true);
         }
@@ -435,6 +445,29 @@
       } catch (error) {
         showMessage('get-asset-message', 'An error occurred during getting asset', true);
         console.error('Error on get asset:', error);
+      }
+    }
+
+    async function getAllAssets() {
+      try {
+        const response = await fetch(`${API_CONFIG.API_BASE_URL}/assets`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${getAuthToken()}`
+          }
+        });
+        const result = await response.json();
+        if (response.ok) {
+          showMessage('get-all-assets-message', 'Get all assets');
+          displayAssetTable(result.data, "get-all-assets-result");
+
+        } else {
+          showMessage('get-all-assets-message', result.errors || 'Get all assets failed', true);
+        }
+      } catch (error) {
+        showMessage('get-all-assets-message', 'An error occurred during getting all assets', true);
+        console.error('Error on get all assets:', error);
       }
     }
 
@@ -642,8 +675,8 @@
 
         const valueQuantityCell = row.insertCell();
         valueQuantityCell.textContent = typeof value === 'object'
-          ? JSON.stringify(  value.quantity )
-          : value.quantity ;
+          ? JSON.stringify(value.quantity)
+          : value.quantity;
         valueQuantityCell.style.padding = '8px';
         valueQuantityCell.style.border = '1px solid #ddd';
         valueQuantityCell.style.wordBreak = 'break-word';
