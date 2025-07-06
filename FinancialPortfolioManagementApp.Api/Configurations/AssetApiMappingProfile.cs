@@ -5,9 +5,9 @@ using FinancialPortfolioManagementApp.Domain.Entities;
 
 namespace FinancialPortfolioManagementApp.Api.Configurations
 {
-    public class AssetMappingProfile : Profile
+    public class AssetApiMappingProfile : Profile
     {
-        public AssetMappingProfile()
+        public AssetApiMappingProfile()
         {
             CreateMap<Asset, AssetResponse>();
             CreateMap<ApiResponse<Asset>, ApiResponse<AssetResponse>>()

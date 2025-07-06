@@ -5,7 +5,6 @@ using FinancialPortfolioManagementApp.Application.Shared.Extensions;
 using FinancialPortfolioManagementApp.Infrastructure.Extensions;
 using Microsoft.AspNetCore.Mvc.Authorization;
 using System.Reflection;
-using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,8 +33,8 @@ builder.Services.AddControllers(options =>
 });
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddAutoMapper(typeof(HoldingApiMappingProfile));
-builder.Services.AddAutoMapper(typeof(AssetMappingProfile));
-builder.Services.AddAutoMapper(typeof(HoldingsProfile));
+builder.Services.AddAutoMapper(typeof(AssetApiMappingProfile));
+builder.Services.AddAutoMapper(typeof(HoldingApplicationProfile));
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
