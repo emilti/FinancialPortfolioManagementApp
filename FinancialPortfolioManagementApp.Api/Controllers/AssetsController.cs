@@ -6,7 +6,8 @@ using FinancialPortfolioManagementApp.Application.Assets.Commands.BuyAsset;
 using FinancialPortfolioManagementApp.Application.Assets.Commands.CreateAsset;
 using FinancialPortfolioManagementApp.Application.Assets.Commands.DeleteAsset;
 using FinancialPortfolioManagementApp.Application.Assets.Commands.UpdateAsset;
-using FinancialPortfolioManagementApp.Application.Assets.Queries;
+using FinancialPortfolioManagementApp.Application.Assets.Queries.GetAllAssets;
+using FinancialPortfolioManagementApp.Application.Assets.Queries.GetAssetById;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -49,6 +50,28 @@ namespace FinancialPortfolioManagementApp.Api.Controllers
 
             var apiResult = _mapper.Map<AssetResponse>(result.Data);
             var apiResponse = ApiResponse<AssetResponse>.FromResult(apiResult);
+
+            return Ok(apiResponse);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAllAssetsAsync()
+        {
+            var query = new GetAllAssetsQuery();
+            var result = await _mediator.Send(query);
+
+            if (result == null || result.Data == null)
+            {
+                return NotFound(new { Errors = result.Errors });
+            }
+
+            if (result.Errors.Any())
+            {
+                return BadRequest(new { Errors = result.Errors });
+            }
+
+            var apiResult = _mapper.Map<List<AssetResponse>>(result.Data);
+            var apiResponse = ApiResponse<List<AssetResponse>>.FromResult(apiResult);
 
             return Ok(apiResponse);
         }

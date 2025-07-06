@@ -1,7 +1,7 @@
 ﻿using FinancialPortfolioManagementApp.Application.Shared.Common;
 using MediatR;
 
-namespace FinancialPortfolioManagementApp.Application.Authentication
+namespace FinancialPortfolioManagementApp.Application.Authentication.Commands.LoginCommand
 {
     public record LoginCommand(
     string Email,

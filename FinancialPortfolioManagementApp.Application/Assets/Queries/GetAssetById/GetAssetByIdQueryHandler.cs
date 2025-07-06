@@ -3,7 +3,7 @@ using FinancialPortfolioManagementApp.Application.Shared.Contracts;
 using FinancialPortfolioManagementApp.Domain.Entities;
 using MediatR;
 
-namespace FinancialPortfolioManagementApp.Application.Assets.Queries
+namespace FinancialPortfolioManagementApp.Application.Assets.Queries.GetAssetById
 {
     public class GetAssetByIdQueryHandler : IRequestHandler<GetAssetByIdQuery, Result<Asset>>
     {

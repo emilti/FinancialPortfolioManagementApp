@@ -6,6 +6,8 @@ namespace FinancialPortfolioManagementApp.Application.Shared.Contracts
     {
         Task<Asset?> GetAsync(Guid id);
 
+        Task<List<Asset>> GetAllAsync();
+
         void Add(Asset asset);
 
         void Update(Asset asset);

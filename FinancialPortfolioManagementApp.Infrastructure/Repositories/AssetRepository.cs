@@ -19,6 +19,11 @@ namespace FinancialPortfolioManagementApp.Infrastructure.Repositories
             return await _dbContext.Assets.FirstOrDefaultAsync(x => x.Id == id);
         }
 
+        public async Task<List<Asset>> GetAllAsync()
+        {
+            return await _dbContext.Assets.ToListAsync();
+        }
+
         public void Add(Asset asset)
         {
             _dbContext.Add(asset);

@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using FinancialPortfolioManagementApp.Api.Common;
 using FinancialPortfolioManagementApp.Application.Authentication;
+using FinancialPortfolioManagementApp.Application.Authentication.Commands.LoginCommand;
+using FinancialPortfolioManagementApp.Application.Authentication.Commands.RegisterCommand;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Cors;
