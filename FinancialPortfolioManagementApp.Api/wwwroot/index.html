@@ -105,6 +105,8 @@
       <div class="tab" onclick="switchTab('create-asset-tab')">Create asset</div>
       <div class="tab" onclick="switchTab('update-asset-tab')">Update asset</div>
       <div class="tab" onclick="switchTab('delete-asset-tab')">Delete asset</div>
+      <div class="tab" onclick="switchTab('buy-asset-tab')">Buy asset</div>
+      <div class="tab" onclick="switchTab('sell-asset-tab')">Sell asset</div>
     </div>
 
     <div id="login-tab" class="tab-content active">
@@ -198,6 +200,38 @@
       </div>
       <button onclick="deleteAsset()">Delete asset</button>
       <div id="delete-asset-message" class="message"></div>
+    </div>
+  </div>
+
+  <div id="buy-asset-tab" class="tab-content">
+    <div class="buy-asset-form">
+      <h2>Buy asset</h2>
+      <div class="form-group">
+        <label for="buy-asset-id">Id:</label>
+        <input type="text" id="buy-asset-id" required>
+      </div>
+      <div class="form-group">
+        <label for="buy-asset-quantity">Quantity:</label>
+        <input type="number" id="buy-asset-quantity" required>
+      </div>
+      <button onclick="buyAsset()">Buy asset</button>
+      <div id="buy-asset-message" class="message"></div>
+    </div>
+  </div>
+
+  <div id="sell-asset-tab" class="tab-content">
+    <div class="sell-asset-form">
+      <h2>Sell asset</h2>
+      <div class="form-group">
+        <label for="sell-asset-id">Id:</label>
+        <input type="text" id="sell-asset-id" required>
+      </div>
+      <div class="form-group">
+        <label for="sell-asset-quantity">Quantity:</label>
+        <input type="number" id="sell-asset-quantity" required>
+      </div>
+      <button onclick="sellAsset()">Sell asset</button>
+      <div id="sell-asset-message" class="message"></div>
     </div>
   </div>
 
@@ -404,6 +438,62 @@
       } catch (error) {
         showMessage('get-asset-message', 'An error occurred during getting asset', true);
         console.error('Error on get asset:', error);
+      }
+    }
+
+    async function buyAsset() {
+      const id = document.getElementById('buy-asset-id').value;
+      const quantity = document.getElementById('buy-asset-quantity').value;
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/assets/${id}/buy`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${getAuthToken()}`
+          },
+          body: JSON.stringify({
+            quantity: quantity,
+
+          })
+        });
+
+        if (response.ok) {
+          showMessage('buy-asset-message', 'Asset bought');
+        } else {
+          showMessage('buy-asset-message', data.errors || 'Buy asset failed', true);
+        }
+      } catch (error) {
+        showMessage('buy-asset-message', 'An error occurred during buying asset', true);
+        console.error('Error on buying asset:', error);
+      }
+    }
+
+    async function sellAsset() {
+      const id = document.getElementById('sell-asset-id').value;
+      const quantity = document.getElementById('sell-asset-quantity').value;
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/assets/${id}/sell`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${getAuthToken()}`
+          },
+          body: JSON.stringify({
+            quantity: quantity,
+
+          })
+        });
+
+        if (response.ok) {
+          showMessage('sell-asset-message', 'Asset sold');
+        } else {
+          showMessage('sell-asset-message', data.errors || 'Sell asset failed', true);
+        }
+      } catch (error) {
+        showMessage('sell-asset-message', 'An error occurred during selling asset', true);
+        console.error('Error on selling asset:', error);
       }
     }
 
