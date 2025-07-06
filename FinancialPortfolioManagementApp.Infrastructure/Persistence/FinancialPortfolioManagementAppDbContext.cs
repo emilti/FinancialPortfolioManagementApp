@@ -112,31 +112,31 @@ namespace FinancialPortfolioManagementApp.Infrastructure.Persistence
                 {
                     Id = Guid.NewGuid(),
                     Name = "Gold",
-                    CurrentMarketPrice = 1950.50m
+                    CurrentMarketPrice = 20m
                 },
                 new Asset
                 {
                     Id = Guid.NewGuid(),
                     Name = "Silver",
-                    CurrentMarketPrice = 24.75m
+                    CurrentMarketPrice = 15m
                 },
                 new Asset
                 {
                     Id = Guid.NewGuid(),
                     Name = "Bitcoin",
-                    CurrentMarketPrice = 42500.00m
+                    CurrentMarketPrice = 30m
                 },
                 new Asset
                 {
                     Id = Guid.NewGuid(),
                     Name = "Apple Stock",
-                    CurrentMarketPrice = 175.25m
+                    CurrentMarketPrice = 40m
                 },
                 new Asset
                 {
                     Id = Guid.NewGuid(),
                     Name = "Tesla Stock",
-                    CurrentMarketPrice = 825.50m
+                    CurrentMarketPrice = 50m
                 }
             };
 
