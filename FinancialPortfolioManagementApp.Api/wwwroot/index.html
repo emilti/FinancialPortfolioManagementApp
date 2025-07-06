@@ -108,6 +108,7 @@
       <div class="tab" onclick="switchTab('buy-asset-tab')">Buy asset</div>
       <div class="tab" onclick="switchTab('sell-asset-tab')">Sell asset</div>
       <div class="tab" onclick="switchTab('get-user-holdings-tab')">Get user holdings</div>
+      <div class="tab" onclick="switchTab('get-user-metrics-tab')">Get user metrics</div>
     </div>
 
     <div id="login-tab" class="tab-content active">
@@ -245,32 +246,21 @@
     </div>
   </div>
 
+  <div id="get-user-metrics-tab" class="tab-content">
+    <div class="get-user-metrics-form">
+      <h2>Get user metrics</h2>
+      <button onclick="getUserMetrics()">Show user metrics</button>
+      <div id="get-user-metrics-message" class="message"></div>
+      <div id="get-user-metrics-result" class="result-container"></div>
+    </div>
+  </div>
+
   <script>
-    // Base API URL - adjust this to match your backend URL
     const API_BASE_URL = 'http://localhost:5063/api';
 
-    // Helper function to get auth token (from localStorage, cookie, etc.)
     const getAuthToken = () => {
       return localStorage.getItem('authToken');
     };
-
-    function switchTab(tabId) {
-      document.querySelectorAll('.tab-content').forEach(content => {
-        content.classList.remove('active');
-      });
-      document.querySelectorAll('.tab').forEach(tab => {
-        tab.classList.remove('active');
-      });
-
-      document.getElementById(tabId).classList.add('active');
-      document.querySelector(`.tab[onclick="switchTab('${tabId}')"]`).classList.add('active');
-    }
-
-    function showMessage(elementId, message, isError = false) {
-      const element = document.getElementById(elementId);
-      element.textContent = message;
-      element.className = isError ? 'error' : 'success';
-    }
 
     async function login() {
       const email = document.getElementById('login-email').value;
@@ -531,7 +521,7 @@
 
     async function getUserMetrics() {
       try {
-        const response = await fetch(`${API_BASE_URL}/holdings`, {
+        const response = await fetch(`${API_BASE_URL}/holdings/metrics`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -540,17 +530,35 @@
         });
         const result = await response.json();
         if (response.ok) {
-          showMessage('get-user-holdings-message', 'User holdings');
-          document.getElementById('get-user-holdings-result').innerHTML = '';
-          displayAssetTable(result.data, "get-user-holdings-result");
+          showMessage('get-user-metrics-message', 'User metrics');
+          document.getElementById('get-user-metrics-result').innerHTML = '';
+          displayMetricsTable(result, "get-user-metrics-result");
 
         } else {
-          showMessage('get-user-holdings-message', result.errors || 'Get user holdings failed', true);
+          showMessage('get-user-metrics-message', result.errors || 'Get user metrics failed', true);
         }
       } catch (error) {
-        showMessage('get-user-holdings-message', 'An error occurred during getting user holdings', true);
-        console.error('Error on get user holdings:', error);
+        showMessage('get-user-metrics-message', 'An error occurred during getting user metrics', true);
+        console.error('Error on get user metrics:', error);
       }
+    }
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(content => {
+        content.classList.remove('active');
+      });
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+
+      document.getElementById(tabId).classList.add('active');
+      document.querySelector(`.tab[onclick="switchTab('${tabId}')"]`).classList.add('active');
+    }
+
+    function showMessage(elementId, message, isError = false) {
+      const element = document.getElementById(elementId);
+      element.textContent = message;
+      element.className = isError ? 'error' : 'success';
     }
 
     function displayAssetTable(assetData, container) {
@@ -561,6 +569,36 @@
       table.style.marginTop = '16px';
 
       for (const [key, value] of Object.entries(assetData)) {
+        const row = table.insertRow();
+
+        const keyCell = row.insertCell();
+        keyCell.textContent = key;
+        keyCell.style.fontWeight = 'bold';
+        keyCell.style.padding = '8px';
+        keyCell.style.border = '1px solid #ddd';
+        keyCell.style.width = '30%';
+        keyCell.style.backgroundColor = '#f2f2f2';
+
+        const valueCell = row.insertCell();
+        valueCell.textContent = typeof value === 'object'
+          ? JSON.stringify(value)
+          : value;
+        valueCell.style.padding = '8px';
+        valueCell.style.border = '1px solid #ddd';
+        valueCell.style.wordBreak = 'break-word';
+      }
+
+      resultDiv.appendChild(table);
+    }
+
+    function displayMetricsTable(metricsData, container) {
+      const table = document.createElement('table');
+      const resultDiv = document.getElementById(container)
+      table.style.width = '100%';
+      table.style.borderCollapse = 'collapse';
+      table.style.marginTop = '16px';
+
+      for (const [key, value] of Object.entries(metricsData)) {
         const row = table.insertRow();
 
         const keyCell = row.insertCell();
