@@ -23,7 +23,7 @@ namespace FinancialPortfolioManagementApp.Api.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register(RegisterRequest request)
+        public async Task<IActionResult> RegisterAsync(RegisterRequest request)
         {
             RegisterCommand command = new RegisterCommand(request.Email, request.Password);
             var authResult = await _mediator.Send(command);
@@ -39,7 +39,7 @@ namespace FinancialPortfolioManagementApp.Api.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login(LoginRequest request)
+        public async Task<IActionResult> LoginAsync(LoginRequest request)
         {
             LoginCommand command = new LoginCommand(request.Email, request.Password);
             var authResult = await _mediator.Send(command);

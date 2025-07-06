@@ -28,7 +28,7 @@ namespace FinancialPortfolioManagementApp.Api.Controllers
         }
 
         [HttpGet("{assetId:guid}")]
-        public async Task<IActionResult> GetAssetById(Guid assetId)
+        public async Task<IActionResult> GetAssetByIdAsync(Guid assetId)
         {
             var query = new GetAssetByIdQuery(assetId);
             var result = await _mediator.Send(query);
@@ -46,7 +46,7 @@ namespace FinancialPortfolioManagementApp.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> CreateAsset([FromBody] CreateAssetRequest request)
+        public async Task<IActionResult> CreateAssetAsync([FromBody] CreateAssetRequest request)
         {
             var command = new CreateAssetCommand(request.Name, request.CurrentMarketPrice);
             var result = await _mediator.Send(command);
@@ -61,13 +61,13 @@ namespace FinancialPortfolioManagementApp.Api.Controllers
             var apiResponse = _mapper.Map<ApiResponse<AssetResponse>>(response);
 
             return CreatedAtAction(
-                nameof(CreateAsset), 
+                nameof(CreateAssetAsync), 
                 new { id = apiResponse.Data?.Id },
                 response);
         }
 
         [HttpPut("{assetId:guid}")]
-        public async Task<IActionResult> UpdateAsset(Guid assetId, [FromBody] UpdateAssetRequest request)
+        public async Task<IActionResult> UpdateAssetAsync(Guid assetId, [FromBody] UpdateAssetRequest request)
         {
             var command = new UpdateAssetCommand(assetId, request.Name, request.CurrentMarketPrice);
             var result = await _mediator.Send(command);
@@ -83,7 +83,7 @@ namespace FinancialPortfolioManagementApp.Api.Controllers
         }
 
         [HttpDelete("{assetId:guid}")]
-        public async Task<IActionResult> DeleteAsset(Guid assetId)
+        public async Task<IActionResult> DeleteAssetAsync(Guid assetId)
         {
             var command = new DeleteAssetCommand(assetId);
             var result = await _mediator.Send(command);
@@ -99,7 +99,7 @@ namespace FinancialPortfolioManagementApp.Api.Controllers
         }
 
         [HttpPost("{assetId:guid}/buy")]
-        public async Task<IActionResult> BuyAsset(Guid assetId, [FromBody] BuyAssetRequest request)
+        public async Task<IActionResult> BuyAssetAsync(Guid assetId, [FromBody] BuyAssetRequest request)
         {
             var command = new BuyAssetCommand(assetId, request.Quantity);
             var result = await _mediator.Send(command);
@@ -115,7 +115,7 @@ namespace FinancialPortfolioManagementApp.Api.Controllers
         }
 
         [HttpPost("{assetId:guid}/sell")]
-        public async Task<IActionResult> SellAsset(Guid assetId, [FromBody] SellAssetRequest request)
+        public async Task<IActionResult> SellAssetAsync(Guid assetId, [FromBody] SellAssetRequest request)
         {
             var command = new SellAssetCommand(assetId, request.Quantity);
             var result = await _mediator.Send(command);

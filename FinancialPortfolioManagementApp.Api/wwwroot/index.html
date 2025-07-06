@@ -107,6 +107,7 @@
       <div class="tab" onclick="switchTab('delete-asset-tab')">Delete asset</div>
       <div class="tab" onclick="switchTab('buy-asset-tab')">Buy asset</div>
       <div class="tab" onclick="switchTab('sell-asset-tab')">Sell asset</div>
+      <div class="tab" onclick="switchTab('get-user-holdings-tab')">Get user holdings</div>
     </div>
 
     <div id="login-tab" class="tab-content active">
@@ -232,6 +233,19 @@
       </div>
       <button onclick="sellAsset()">Sell asset</button>
       <div id="sell-asset-message" class="message"></div>
+    </div>
+  </div>
+
+  <div id="get-user-holdings-tab" class="tab-content">
+    <div class="get-user-holdings-form">
+      <h2>Get user holdings</h2>
+      <div class="form-group">
+        <label for="get-user-holdings-user-id">Id:</label>
+        <input type="text" id="get-user-holdings-user-id" required>
+      </div>
+      <button onclick="getUserHoldings()">Get user holdings</button>
+      <div id="get-user-holdings-message" class="message"></div>
+      <div id="get-user-holdings-result" class="result-container"></div>
     </div>
   </div>
 
@@ -497,9 +511,36 @@
       }
     }
 
+    async function getUserHoldings() {
+      const id = document.getElementById('get-user-holdings-user-id').value;
+
+      try {
+        const response = await fetch(`${API_BASE_URL}/holdings?userId=${id}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${getAuthToken()}`
+          }
+        });
+        const result = await response.json();
+        if (response.ok) {
+          showMessage('get-user-holdings-message', 'User holdings');
+          document.getElementById('get-user-holdings-user-id').value = '';
+          document.getElementById('get-user-holdings-result').innerHTML = '';
+          displayAssetTable(result.data, "get-user-holdings-result");
+
+        } else {
+          showMessage('get-user-holdings-message', result.errors || 'Get user holdings failed', true);
+        }
+      } catch (error) {
+        showMessage('get-user-holdings-message', 'An error occurred during getting user holdings', true);
+        console.error('Error on get user holdings:', error);
+      }
+    }
+
     function displayAssetTable(assetData, container) {
       const table = document.createElement('table');
-      const resultDiv = document.getElementById('asset-result')
+      const resultDiv = document.getElementById(container)
       table.style.width = '100%';
       table.style.borderCollapse = 'collapse';
       table.style.marginTop = '16px';

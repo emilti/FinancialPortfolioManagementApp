@@ -6,7 +6,6 @@
 
         public decimal Quantity { get; set; }
 
-
         public required Guid AssetId { get; set; }
 
         public AssetDto? Asset { get; set; }

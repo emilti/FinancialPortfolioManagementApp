@@ -27,7 +27,7 @@ namespace FinancialPortfolioManagementApp.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetHoldingsSummaryByUserId([FromQuery] Guid userId)
+        public async Task<IActionResult> GetHoldingsSummaryByUserIdAsync([FromQuery] Guid userId)
         {
             var query = new GetHoldingsSummaryByUserIdQuery(userId);
             var result = await _mediator.Send(query);
@@ -45,7 +45,7 @@ namespace FinancialPortfolioManagementApp.Api.Controllers
         }
 
         [HttpGet("metrics")]
-        public async Task<IActionResult> GetPortfolioMetricsByUserId([FromQuery] Guid userId)
+        public async Task<IActionResult> GetPortfolioMetricsByUserIdAsync([FromQuery] Guid userId)
         {
             var query = new GetPortfolioMetricsByUserIdQuery(userId);
             var result = await _mediator.Send(query);
