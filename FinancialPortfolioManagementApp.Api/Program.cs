@@ -33,6 +33,7 @@ builder.Services.AddControllers(options =>
 
 });
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddAutoMapper(typeof(HoldingApiMappingProfile));
 builder.Services.AddAutoMapper(typeof(AssetMappingProfile));
 builder.Services.AddAutoMapper(typeof(HoldingsProfile));
 builder.Services.AddApplication();

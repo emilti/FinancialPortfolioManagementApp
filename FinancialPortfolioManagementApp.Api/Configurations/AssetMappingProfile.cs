@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Azure;
 using FinancialPortfolioManagementApp.Api.Common;
 using FinancialPortfolioManagementApp.Api.Models.Assets.Response;
 using FinancialPortfolioManagementApp.Domain.Entities;

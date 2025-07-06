@@ -4,5 +4,5 @@ using MediatR;
 
 namespace FinancialPortfolioManagementApp.Application.Holdings.Query.GetHoldingsSummaryByUserId
 {
-    public record GetHoldingsSummaryByUserIdQuery() : IRequest<Result<HoldingsSummary>>;
+    public record GetHoldingsSummaryQuery() : IRequest<Result<HoldingsSummary>>;
 }

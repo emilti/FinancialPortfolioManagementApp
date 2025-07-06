@@ -7,14 +7,14 @@ using MediatR;
 
 namespace FinancialPortfolioManagementApp.Application.Holdings.Query.GetHoldingsSummaryByUserId
 {
-    public class GetHoldingsSummaryByUserIdQueryHandler : IRequestHandler<GetHoldingsSummaryByUserIdQuery, Result<HoldingsSummary>>
+    public class GetHoldingsSummaryQueryHandler : IRequestHandler<GetHoldingsSummaryQuery, Result<HoldingsSummary>>
     {
         private readonly IHoldingRepository _holdingRepository;
 
         private readonly IMapper _mapper;
 
         private readonly ICurrentUserService _currentUserService;
-        public GetHoldingsSummaryByUserIdQueryHandler(
+        public GetHoldingsSummaryQueryHandler(
             IHoldingRepository holdingRepository,
             IMapper mapper,
             ICurrentUserService currentUserService)
@@ -24,7 +24,7 @@ namespace FinancialPortfolioManagementApp.Application.Holdings.Query.GetHoldings
             _currentUserService = currentUserService;
         }
         public async Task<Result<HoldingsSummary>> Handle(
-                GetHoldingsSummaryByUserIdQuery request,
+                GetHoldingsSummaryQuery request,
                 CancellationToken cancellationToken)
         {
             Guid userId = new Guid(_currentUserService.UserId);

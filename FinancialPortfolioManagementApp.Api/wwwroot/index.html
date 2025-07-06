@@ -529,6 +529,30 @@
       }
     }
 
+    async function getUserMetrics() {
+      try {
+        const response = await fetch(`${API_BASE_URL}/holdings`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${getAuthToken()}`
+          }
+        });
+        const result = await response.json();
+        if (response.ok) {
+          showMessage('get-user-holdings-message', 'User holdings');
+          document.getElementById('get-user-holdings-result').innerHTML = '';
+          displayAssetTable(result.data, "get-user-holdings-result");
+
+        } else {
+          showMessage('get-user-holdings-message', result.errors || 'Get user holdings failed', true);
+        }
+      } catch (error) {
+        showMessage('get-user-holdings-message', 'An error occurred during getting user holdings', true);
+        console.error('Error on get user holdings:', error);
+      }
+    }
+
     function displayAssetTable(assetData, container) {
       const table = document.createElement('table');
       const resultDiv = document.getElementById(container)

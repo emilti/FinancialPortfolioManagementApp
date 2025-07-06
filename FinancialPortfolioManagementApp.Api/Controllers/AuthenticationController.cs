@@ -26,14 +26,14 @@ namespace FinancialPortfolioManagementApp.Api.Controllers
         public async Task<IActionResult> RegisterAsync(RegisterRequest request)
         {
             RegisterCommand command = new RegisterCommand(request.Email, request.Password);
-            var authResult = await _mediator.Send(command);
+            var result = await _mediator.Send(command);
             
-            var response = ApiResponse<AuthenticationResult>.FromResult(authResult);
-            
-            if (response.Errors.Any())
+            if (result.Errors.Any())
             {
-                return BadRequest(String.Join(',', response.Errors));
+                return BadRequest(String.Join(',', result.Errors));
             }
+
+            var response = ApiResponse<AuthenticationResult>.FromResult(result);
 
             return Ok(response);
         }
@@ -42,14 +42,14 @@ namespace FinancialPortfolioManagementApp.Api.Controllers
         public async Task<IActionResult> LoginAsync(LoginRequest request)
         {
             LoginCommand command = new LoginCommand(request.Email, request.Password);
-            var authResult = await _mediator.Send(command);
+            var result = await _mediator.Send(command);
 
-            var response = ApiResponse<AuthenticationResult>.FromResult(authResult);
-
-            if (response.Errors.Any())
+            if (result.Errors.Any())
             {
-                return BadRequest(String.Join(',', response.Errors));
+                return BadRequest(String.Join(',', result.Errors));
             }
+
+            var response = ApiResponse<AuthenticationResult>.FromResult(result);
 
             return Ok(response);
         }
